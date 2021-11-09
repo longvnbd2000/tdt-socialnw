@@ -54,6 +54,8 @@
     justify-content: center;
 }
 .navbar-link{
+    display: flex;
+    align-items: center;
     margin: 0px 20px;
     cursor: pointer;
     color: white;
@@ -64,6 +66,9 @@
 }
 .navbar-link:hover{
     background-color: rgb(59, 157, 255);
+}
+.navbar-link-text{
+    margin-left: 10px;
 }
 
 /* Navbar rightside*/
@@ -131,21 +136,25 @@
 }
 
 
-
+/* Main page*/
 .mainContainer{
     display: flex;
 }
+
+/* Sidebar*/
 .sidebar{
     flex: 3;
+    height: calc(100vh - 50px);
 }
 .sidebar-items{
     padding: 20px;
 }
+/* Sidebar user*/
 .sidebar-user{
     display: flex;
     align-items: center;
     cursor: pointer;
-    width: 100%;
+    width: 80%;
     padding: 10px;
     border-radius: 10px;
 }
@@ -156,16 +165,114 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    object-fit: cover;
 }
 .sidebar-user-name{
     margin-left: 10px;
     font-weight: bold;
 }
+/* Sidebar list item*/
+.sidebar-list{
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+.sidebar-list-item{
+    cursor: pointer;
+    width: 80%;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+}
+.sidebar-list-item:hover{
+    background-color: aliceblue;
+}
+.sidebar-list-item-icon{
+    font-size: 40px !important;
+}
+.sidebar-list-item-text{
+    margin-left: 10px;
+    font-weight: bold;
+}
+.sidebar-line{
+    margin: 10px 0 0 10px;
+    width: 80%;
+}
 
-
+/* New feed*/
 .feed{
     flex: 6;
 }
+.feed-items{
+    padding: 20px 100px;
+}
+
+/*Share*/
+.share{
+    background-color: aliceblue;
+    border-radius: 10px;
+}
+.share-top{
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+.share-avatar{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+.share-input{
+    display: flex;
+    width: 100%;
+    height: 40px;
+    border-radius: 40px;
+    margin-left: 20px;
+    border: none;
+    background-color: rgb(205, 226, 233);
+}
+.share-input-box{
+    margin-left: 20px;
+    align-items: center;
+    border: none;
+    background-color: rgb(205, 226, 233);
+    width: 85%;
+    font-size: 18px;
+}
+.share-input-box:focus{
+    outline: none;
+}
+.share-line{
+    width: 90%;
+}
+
+.share-bottom{
+    padding: 0px 20px 10px 20px;
+}
+.share-options{
+    display: flex;
+    justify-content: space-around;
+}
+.share-option-item{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    width: 100%;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.share-option-item:hover{
+    background-color: rgb(205, 226, 233);
+}
+.share-option-item-icon{
+    font-size: 40px !important;
+}
+
+/* Rightbar*/
 .rightbar{
     flex: 3;
 }

@@ -1,4 +1,4 @@
-import {Search, Notifications, Person} from '@mui/icons-material'
+import {Search, Notifications, Person, Home} from '@mui/icons-material'
 
 export default function Navbar() {
     return (
@@ -12,10 +12,12 @@ export default function Navbar() {
             </div>
             <div className="navbar-center">
                 <div className="navbar-link">
-                    Homepage
+                    <Home/>
+                    <div className="navbar-link-text">Homepage</div>
                 </div>
                 <div className="navbar-link">
-                    Homepage
+                    <Home/>
+                    <div className="navbar-link-text">Homepage</div>
                 </div>
             </div>
             <div className="navbar-right">
