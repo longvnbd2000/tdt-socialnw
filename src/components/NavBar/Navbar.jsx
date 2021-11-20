@@ -1,4 +1,4 @@
-import {Search, Notifications, Person, Home} from '@mui/icons-material'
+import {Search, Notifications, Person, Home, NotificationImportant} from '@mui/icons-material'
 
 export default function Navbar() {
     return (
@@ -16,8 +16,8 @@ export default function Navbar() {
                     <div className="navbar-link-text">Homepage</div>
                 </div>
                 <div className="navbar-link">
-                    <Home/>
-                    <div className="navbar-link-text">Homepage</div>
+                    <NotificationImportant/>
+                    <div className="navbar-link-text">Announcement</div>
                 </div>
             </div>
             <div className="navbar-right">
