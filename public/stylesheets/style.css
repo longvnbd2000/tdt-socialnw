@@ -1,6 +1,11 @@
 *{
     font-family: 'Roboto', sans-serif;
     margin: 0;
+    
+}
+body{
+    background-color: #f0f2f5;
+    color: black;
 }
 ::-webkit-scrollbar{
     width: 5px !important;
@@ -22,6 +27,7 @@
     align-items: center;
     position: sticky;
     top: 0;
+    z-index: 999;
 }
 
 /* Navbar leftside*/
@@ -157,6 +163,7 @@
     height: calc(100vh - 50px);
     position: sticky;
     top: 50px;
+    overflow-y: auto;
 }
 .sidebar-items{
     padding: 20px;
@@ -212,6 +219,26 @@
     width: 100%;
 }
 
+.sidebar-group{
+    list-style-type: none;
+    margin: 20px;
+    padding: 0;
+}
+.sidebar-group-item{
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+.sidebar-group-item-avatar{
+    margin-right: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+    position: relative;
+}
+
 /* New feed*/
 .feed{
     flex: 8;
@@ -222,7 +249,7 @@
 
 /*Share*/
 .share{
-    background-color: aliceblue;
+    background-color: white;
     border-radius: 10px;
 }
 /*Share top*/
@@ -300,7 +327,7 @@
 .post{
     margin-top: 15px;
     width: 100%;
-    background-color: aliceblue;
+    background-color: white;
     border-radius: 10px;
 }
 /* Post top*/
@@ -435,4 +462,37 @@
     left: 47px;
     background-color: green;
     margin-right: 10px;
+}
+
+
+/*Profile*/
+
+.profile-cover{
+    height: 360px;
+    position: relative;
+}
+.profile-cover-background{
+    height: 300px;
+    width: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+}
+.profile-cover-avatar{
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    top: 200px;
+    border: 2px solid white;
+}
+.profile-user{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 20px;
 }

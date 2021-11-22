@@ -35,6 +35,41 @@ export default function Sidebar() {
                     </li>
                 </ul>
                 <hr className="sidebar-line" />
+                <div className="rightbar-title">Faculty</div>
+                <ul className="sidebar-group">
+                    <li className="sidebar-group-item">
+                        <img src="assets/avatar/ok.jpg" alt="" className="sidebar-group-item-avatar" />
+                        <span className="sidebar-group-item-user">Khoa Công nghệ thông tin</span>
+                    </li>
+                    <li className="sidebar-group-item">
+                        <img src="assets/avatar/ok.jpg" alt="" className="sidebar-group-item-avatar" />
+                        <span className="sidebar-group-item-user">Khoa Khoa học xã hội và nhân văn</span>
+                    </li>
+                    <li className="sidebar-group-item">
+                        <img src="assets/avatar/ok.jpg" alt="" className="sidebar-group-item-avatar" />
+                        <span className="sidebar-group-item-user">Khoa Công nghệ thông tin</span>
+                    </li>
+                    <li className="sidebar-group-item">
+                        <img src="assets/avatar/ok.jpg" alt="" className="sidebar-group-item-avatar" />
+                        <span className="sidebar-group-item-user">Khoa Công nghệ thông tin</span>
+                    </li>
+                    <li className="sidebar-group-item">
+                        <img src="assets/avatar/ok.jpg" alt="" className="sidebar-group-item-avatar" />
+                        <span className="sidebar-group-item-user">Khoa Công nghệ thông tin</span>
+                    </li>
+                    <li className="sidebar-group-item">
+                        <img src="assets/avatar/ok.jpg" alt="" className="sidebar-group-item-avatar" />
+                        <span className="sidebar-group-item-user">Khoa Công nghệ thông tin</span>
+                    </li>
+                    <li className="sidebar-group-item">
+                        <img src="assets/avatar/ok.jpg" alt="" className="sidebar-group-item-avatar" />
+                        <span className="sidebar-group-item-user">Khoa Công nghệ thông tin</span>
+                    </li>
+                    <li className="sidebar-group-item">
+                        <img src="assets/avatar/ok.jpg" alt="" className="sidebar-group-item-avatar" />
+                        <span className="sidebar-group-item-user">Khoa Công nghệ thông tin</span>
+                    </li>
+                </ul>
             </div>
         </div>
     )
