@@ -1,6 +1,7 @@
-import Profile from "./Profile";
-import Post from "./Post";
-import Share from "./Share";
+import Profile from "../Profile/Profile";
+import Post from "../Post/Post";
+import Share from "../Share/Share";
+import './Feed.css'
 
 
 export default function Feed({profile}) {

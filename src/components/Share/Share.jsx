@@ -1,4 +1,5 @@
 import {Photo, Tag, AddReaction} from '@mui/icons-material'
+import './Share.css'
 
 export default function Share() {
     return (

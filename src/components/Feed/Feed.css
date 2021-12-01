@@ -1,0 +1,7 @@
+/* New feed*/
+.feed{
+    flex: 8;
+}
+.feed-items{
+    padding: 20px 300px;
+}

@@ -1,4 +1,5 @@
 import {Home} from '@mui/icons-material'
+import './Sidebar.css'
 
 export default function Sidebar() {
     return (

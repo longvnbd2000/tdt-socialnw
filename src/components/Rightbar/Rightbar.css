@@ -1,0 +1,44 @@
+/* Rightbar*/
+.rightbar{
+    flex: 2;
+    height: calc(100vh - 50px);
+    position: sticky;
+    top: 50px;
+    overflow-y: auto;
+}
+.rightbar-title{
+    margin: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+.rightbar-online-list{
+    list-style-type: none;
+    margin: 20px;
+    padding: 0;
+}
+.rightbar-online-list-items{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.rightbar-online-list-item-avatar{
+    margin-right: 10px;    
+}
+.rightbar-online-list-item-avatar img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    position: relative;
+}
+.rightbar-online-tick{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    position: absolute;
+    left: 47px;
+    background-color: green;
+    margin-right: 10px;
+}

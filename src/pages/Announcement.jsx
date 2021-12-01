@@ -1,16 +1,14 @@
-import Feed from "../components/Feed/Feed"
+import Announcement from "../components/Announcemnet/Announcement"
 import Navbar from "../components/NavBar/Navbar"
-import Rightbar from "../components/Rightbar/Rightbar"
 import Sidebar from "../components/Sidebar/Sidebar"
 
-export default function Home() {
+export default function Profile() {
     return (
         <div>
             <Navbar/>
             <div className="mainContainer">
                 <Sidebar/>
-                <Feed/>
-                <Rightbar/>
+                <Announcement/>
             </div>
         </div>
     )
