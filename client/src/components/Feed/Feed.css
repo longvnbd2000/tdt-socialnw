@@ -5,3 +5,8 @@
 .feed-items{
     padding: 20px 300px;
 }
+@media only screen and (max-width: 10000px){
+    .feed-items{
+        padding: 20px;
+    }
+}

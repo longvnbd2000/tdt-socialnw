@@ -5,7 +5,7 @@ import SigninPage from "./pages/SigninPage";
 
 function App() {
   return (
-    <SigninPage/>
+    <Home/>
   );
 }
 
