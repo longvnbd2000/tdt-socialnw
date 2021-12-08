@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema({
     },
     avatar:{
         type: String,
-        default: ""
+        default: "avatar/noAvatar.jpg"
     },
     background:{
         type: String,

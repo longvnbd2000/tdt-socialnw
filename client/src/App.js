@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import SigninPage from "./pages/SigninPage";
 import {BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import './App.css'
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
 
         <Route path="/announcement" element={<Announcement/>} />    
 
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:username" element={<Profile />} />
 
         <Route path="*" element={<Navigate to ="/" />}/>
       </Routes>

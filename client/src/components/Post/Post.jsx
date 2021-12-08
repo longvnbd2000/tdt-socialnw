@@ -2,9 +2,13 @@ import * as React from 'react'
 import { MoreVert, ThumbUpAlt, Comment, Settings} from '@mui/icons-material'
 import { IconButton, MenuItem, Menu, ListItemIcon, Divider} from '@mui/material'
 import './Post.css'
+import { useState, useEffect } from "react";
+import axios from 'axios'
 
 
-export default function Post() {
+export default function Post({ post }) {
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER
+
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -14,13 +18,22 @@ export default function Post() {
       setAnchorEl(null);
     };
 
+    const [user, setUser] = useState({})
+    useEffect(() => {
+        const fetchUser = async () => {
+            const res = await axios.get(process.env.REACT_APP_SV_HOST + '/users/' + post.userId)
+            setUser(res.data)
+        }
+        fetchUser()
+    }, [post.userId])
+
     return (
         <div className="post">
             <div className="post-top">
                 <div className="post-top-left">
-                    <img src="/assets/avatar/ok.jpg" alt="" className="post-top-avatar" />
+                    <img src={PF+user.avatar} alt="" className="post-top-avatar" />
                     <div className="post-top-user">
-                        <p className="post-top-user-name">Shun Lung</p>
+                        <p className="post-top-user-name">{user.username}</p>
                         <p className="post-top-user-time">5 mins ago</p>
                     </div>
                 </div>
@@ -96,9 +109,10 @@ export default function Post() {
 
             <div className="post-center">
                 <div className="post-center-text">
-                    This is my first post
+                    {post.text}
                 </div>
-                <img src="assets/post/pointingdog.jpg" alt="" className="post-center-media" />
+                {post.img ? <img src={PF+post.img} alt="" className="post-center-media" /> : null}
+                
             </div>
 
             <div className="post-bottom">

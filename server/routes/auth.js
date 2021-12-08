@@ -2,6 +2,8 @@ const router = require('express').Router()
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const jwtHelper = require('../helpers/jwtHelper')
+const passport = require('passport')
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
 
 router.get('/', (req, res) => {
     res.send('auth page')
@@ -57,13 +59,66 @@ router.get('/user', async(req, res) => {
     try{
         const jwt = req.session.userToken
         const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET
-        const decoded = await jwtHelper.verifyToken(jwt, accessTokenSecret)
+        const decoded = await jwtHelper.verifyToken(req.body.token, accessTokenSecret)
         
-        res.status(200).json(decoded.data)
+        const user = await User.findOne({_id: decoded.data._id})
+        const {password, ...other} = user._doc
+        res.status(200).json(other)
     }
     catch(err){
         res.status(500).json(err)
     }
 })
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:8080/api/auth/google/callback"
+    },
+    function(accessToken, refreshToken, profile, done) {
+        const authId = 'google:' + profile.id;
+        User.findOne({ 'authId': authId })
+        .then(user => {
+            if(user) return done(null, user);
+            new User({
+                authId: authId,
+                username: profile.displayName,
+                email: profile.emails[0].value,
+                role: 'student',
+            }).save()
+            .then(user => done(null, user))
+            .catch(err => done(err, null));
+        })
+        .catch(err => {
+            if(err) return done(err, null);
+        });
+    }
+))
+passport.serializeUser(function(user, done) {
+    done(null, user._id);
+})
+  
+passport.deserializeUser((id, done) => {
+    User.findById(id)
+    .then(user => done(null, user))
+    .catch(err => done(err, null));
+})
+  
+router.get('/google', passport.authenticate('google', { scope: [
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/auth/userinfo.email'
+]}))
+
+
+router.get('/google/callback', passport.authenticate('google', { 
+    successRedirect: 'http://localhost:3000/',
+    failureRedirect: 'http://localhost:3000/signin' 
+}))
+
+//router.get('/google/logout', function(req, res){
+//    req.logout()
+//    res.redirect('http://localhost:3000/signin')
+//})
+
 
 module.exports = router

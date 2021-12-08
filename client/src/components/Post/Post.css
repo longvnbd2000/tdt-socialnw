@@ -49,6 +49,7 @@
 }
 /* Post bottom*/
 .post-bottom{
+    margin-top: 20px;
     padding: 5px 20px 10px 20px;
 }
 .post-bottom-count{

@@ -351,12 +351,14 @@ export default function Navbar() {
                     </ListItemIcon>
                     Settings
                     </MenuItem>
+                    <Link to="/">
                     <MenuItem>
                     <ListItemIcon>
                         <Logout fontSize="small" />
                     </ListItemIcon>
                     Logout
                     </MenuItem>
+                    </Link>
                 </Menu>
             </div>
         </div>

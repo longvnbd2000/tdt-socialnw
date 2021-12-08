@@ -52,14 +52,7 @@ export default function Signin() {
                 <div className={students}>
                     <div>@student.tdtu.edu.vn</div>
 
-                    <GoogleLogin
-                        className="signin-gg-btn"
-                        clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
-                    
-                        
-                        cookiePolicy={'single_host_origin'}
-                    />
-                    
+                    <a href='http://localhost:8080/api/auth/google'>signin with google</a>
                 </div>
                 
             </div>

@@ -79,9 +79,12 @@ router.get('/:id', async(req, res) => {
 })
 
 //get all post
-router.get('/timeline/allpost', async(req, res) => {
+router.get('/timeline/page/:page/limit/:limit', async(req, res) => {
     try{
-        const allPost = await Post.find()
+        let page = parseInt(req.params.page)
+        let limit = parseInt(req.params.limit)
+        let skip = (page-1)*limit
+        const allPost = await Post.find().sort([['createdAt', -1]]).skip(skip).limit(limit)
         res.status(200).json(allPost)
     }
     catch(err){
