@@ -1,3 +1,7 @@
+a{
+    text-decoration: none;
+}
+
 /* Navbar */
 .navbarContainer{
     height: 50px;
@@ -16,8 +20,9 @@
     display: flex;
     align-items: center;
 }
-.navbar-left .logo{
+.logo{
     font-size: 30px;
+    margin-top: 0 !important;
     margin-left: 20px;
     font-weight: bold;
     color: white;

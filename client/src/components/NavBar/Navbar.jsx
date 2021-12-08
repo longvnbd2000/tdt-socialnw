@@ -2,6 +2,7 @@ import * as React from 'react'
 import {Search, Notifications, Person, Home, NotificationImportant, PersonAdd, Settings, Logout} from '@mui/icons-material'
 import {Menu, MenuItem, Avatar, Divider, ListItemIcon, List, ListItemAvatar, ListItemText, Typography, ListItemButton} from '@mui/material'
 import './Navbar.css'
+import { Link } from 'react-router-dom'
 
 export default function Navbar() {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -34,21 +35,28 @@ export default function Navbar() {
     return (
         <div className="navbarContainer">
             <div className="navbar-left">
-                <div className="logo">TDTU</div>
+                <Link to="/">
+                    <div className="logo">TDTU</div>
+                </Link>
+                
                 <div className="navbar-search">
                     <Search className="navbar-search-icon"/>
                     <input placeholder="Search for people" className="navbar-search-bar" />
                 </div>
             </div>
             <div className="navbar-center">
+                <Link to="/">
                 <div className="navbar-link">
                     <Home/>
                     <div className="navbar-link-text">Homepage</div>
                 </div>
+                </Link>
+                <Link to="/announcement">
                 <div className="navbar-link">
                     <NotificationImportant/>
                     <div className="navbar-link-text">Announcement</div>
                 </div>
+                </Link>
             </div>
             <div className="navbar-right">
                 <div className="navbar-icons">
