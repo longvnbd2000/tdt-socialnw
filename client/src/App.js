@@ -15,7 +15,7 @@ function App() {
 
         <Route path="/announcement" element={<Announcement/>} />    
 
-        <Route path="/profile/:username" element={<Profile />} />
+        <Route path="/profile/:emailname" element={<Profile />} />
 
         <Route path="*" element={<Navigate to ="/" />}/>
       </Routes>

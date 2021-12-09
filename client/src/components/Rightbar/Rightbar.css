@@ -42,3 +42,21 @@
     background-color: green;
     margin-right: 10px;
 }
+
+.rightbar::-webkit-scrollbar {
+	width: 14px;
+}
+.rightbar::-webkit-scrollbar-thumb {
+	background-clip: content-box;
+	border: 4px solid transparent;
+	border-radius: 7px;
+	box-shadow: inset 0 0 0 10px;
+}
+.rightbar::-webkit-scrollbar-button {
+	width: 0;
+	height: 0;
+	display: none;
+}
+.rightbar::-webkit-scrollbar-corner {
+	background-color: transparent;
+}

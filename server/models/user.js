@@ -11,6 +11,10 @@ const UserSchema = new mongoose.Schema({
         max: 100,
         unique: true
     },
+    emailname:{
+        type: String,
+        unique: true
+    },
     username:{
         type: String,
         default: ""
@@ -25,7 +29,7 @@ const UserSchema = new mongoose.Schema({
     },
     background:{
         type: String,
-        default: ""
+        default: "background/nodejs.png"
     },
     role:{
         type: String,

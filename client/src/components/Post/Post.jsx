@@ -1,9 +1,10 @@
 import * as React from 'react'
 import { MoreVert, ThumbUpAlt, Comment, Settings} from '@mui/icons-material'
-import { IconButton, MenuItem, Menu, ListItemIcon, Divider} from '@mui/material'
+import { IconButton, MenuItem, Menu, ListItemIcon, Divider, CircularProgress} from '@mui/material'
 import './Post.css'
 import { useState, useEffect } from "react";
 import axios from 'axios'
+import { Link } from 'react-router-dom';
 
 
 export default function Post({ post }) {
@@ -19,24 +20,38 @@ export default function Post({ post }) {
     };
 
     const [user, setUser] = useState({})
+    const [likes, setLikes] = useState(0)
     useEffect(() => {
+        let isActive = true
         const fetchUser = async () => {
-            const res = await axios.get(process.env.REACT_APP_SV_HOST + '/users/' + post.userId)
-            setUser(res.data)
+            const res = await axios.get(process.env.REACT_APP_SV_HOST + '/users?userId=' + post.userId)
+            if (isActive) {
+                setUser(res.data)
+                setLikes(post.likes.length)
+            }
         }
         fetchUser()
+        return () => isActive = false
     }, [post.userId])
+
+
+    const likeClickHandle = () => {
+        
+        setLikes(likes + 1)
+    }
 
     return (
         <div className="post">
             <div className="post-top">
+                <Link to={'/profile/' + user.emailname}>
                 <div className="post-top-left">
-                    <img src={PF+user.avatar} alt="" className="post-top-avatar" />
+                    {user.avatar? <img src={PF+user.avatar} alt="" className="post-top-avatar" /> : <CircularProgress />}
                     <div className="post-top-user">
                         <p className="post-top-user-name">{user.username}</p>
                         <p className="post-top-user-time">5 mins ago</p>
                     </div>
                 </div>
+                </Link>
                 <div className="post-top-right">
                 <IconButton
                     aria-label="more"
@@ -119,15 +134,15 @@ export default function Post({ post }) {
                 <div className="post-bottom-count">
                     <div className="post-bottom-count-like">
                         <ThumbUpAlt className="post-bottom-count-icon"/>
-                        <span className="post-bottom-count-text">200</span> 
+                        <span className="post-bottom-count-text">{likes}</span> 
                     </div>
                     <div className="post-bottom-count-comments">
-                        200 comments
+                    20 comments
                     </div>
                 </div>
                 <hr />
                 <div className="post-bottom-item">
-                    <div className="post-bottom-like-comment">
+                    <div className="post-bottom-like-comment" onClick={likeClickHandle}>
                         <ThumbUpAlt/>
                         <span className="post-bottom-like-comment-text">Like</span>
                     </div>

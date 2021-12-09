@@ -5,7 +5,9 @@
     position: sticky;
     top: 50px;
     overflow-y: auto;
+
 }
+
 .sidebar-items{
     padding: 20px;
 }
@@ -78,4 +80,22 @@
     border-radius: 8px;
     object-fit: cover;
     position: relative;
+}
+
+.sidebar::-webkit-scrollbar {
+	width: 14px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+	background-clip: content-box;
+	border: 4px solid transparent;
+	border-radius: 7px;
+	box-shadow: inset 0 0 0 10px;
+}
+.sidebar::-webkit-scrollbar-button {
+	width: 0;
+	height: 0;
+	display: none;
+}
+.sidebar::-webkit-scrollbar-corner {
+	background-color: transparent;
 }

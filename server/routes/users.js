@@ -2,14 +2,14 @@ const router = require('express').Router()
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 
-router.get('/', (req, res) => {
-    res.send('user page')
-})
+
 
 //get a user
-router.get('/:id', async(req, res) => {
+router.get('/', async(req, res) => {
+    const userId = req.query.userId
+    const emailname = req.query.emailname
     try{
-        const user = await User.findById(req.params.id)
+        const user = userId ? await User.findById(userId) : await User.findOne({emailname: emailname})
         const {password, ...other} = user._doc
         res.status(200).json(other)
     }
@@ -60,6 +60,7 @@ router.delete('/:id', async(req, res) => {
         res.status(400).json("you can delete only your account")
     }
 })
+
 
 
 module.exports = router

@@ -94,3 +94,8 @@
 .post-bottom-like-comment:hover{
     background-color: rgb(205, 226, 233);
 }
+
+a{
+    text-decoration: none;
+    color: black;
+}

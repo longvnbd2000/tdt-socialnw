@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const Post = require('../models/post')
+const User = require('../models/user')
 
 //create post
 router.post('/', async(req, res) => {
@@ -85,6 +86,22 @@ router.get('/timeline/page/:page/limit/:limit', async(req, res) => {
         let limit = parseInt(req.params.limit)
         let skip = (page-1)*limit
         const allPost = await Post.find().sort([['createdAt', -1]]).skip(skip).limit(limit)
+        res.status(200).json(allPost)
+    }
+    catch(err){
+        res.status(500).json(err)
+    }
+})
+
+//get user's post
+router.get('/profile/emailname/:emailname/page/:page/limit/:limit', async(req, res) => {
+    try{
+        let emailname = req.params.emailname
+        let page = parseInt(req.params.page)
+        let limit = parseInt(req.params.limit)
+        let skip = (page-1)*limit
+        const user = await User.findOne({emailname})
+        const allPost = await Post.find({userId: user._id}).sort([['createdAt', -1]]).skip(skip).limit(limit)
         res.status(200).json(allPost)
     }
     catch(err){
