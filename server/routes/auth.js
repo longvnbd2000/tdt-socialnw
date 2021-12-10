@@ -30,7 +30,7 @@ router.post('/register', async(req, res) => {
     }
 })
 
-router.post('/login', async(req, res) => {
+router.post('/signin', async(req, res) => {
     try{
         const user = await User.findOne({email: req.body.email})
         if (!user){
@@ -49,7 +49,7 @@ router.post('/login', async(req, res) => {
         const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET
         const accessToken = await jwtHelper.generateToken(userData, accessTokenSecret, accessTokenLife)
         req.session.userToken = accessToken
-        res.status(200).json({code: "success", accessToken})
+        res.status(200).json("success")
     }
     catch(err){
         res.status(500).json(err)
@@ -60,8 +60,9 @@ router.post('/login', async(req, res) => {
 router.get('/user', async(req, res) => {
     try{
         const jwt = req.session.userToken
+        console.log(req.session.userToken)
         const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET
-        const decoded = await jwtHelper.verifyToken(req.body.token, accessTokenSecret)
+        const decoded = await jwtHelper.verifyToken(jwt, accessTokenSecret)
         
         const user = await User.findOne({_id: decoded.data._id})
         const {password, ...other} = user._doc

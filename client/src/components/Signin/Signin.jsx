@@ -1,6 +1,10 @@
+import axios from 'axios'
+import { useRef } from 'react'
+import { useContext } from 'react'
 import { useState } from 'react'
 import {GoogleLogin} from 'react-google-login'
 import './Signin.css'
+import { AuthContext } from '../../context/AuthContext'
 
 export default function Signin() {
 
@@ -9,6 +13,11 @@ export default function Signin() {
     const [toggleBtnOth, setToggleBtnOth] = useState('toggle-btn oth')
     const [students, setStudents] = useState('students')
     const [others, setOthers] = useState('others')
+
+    const SV = process.env.REACT_APP_SV_HOST
+    const emailRef = useRef()
+    const passwordRef = useRef()
+    const {isFetching, error, dispatch} = useContext(AuthContext)
 
     const studentSignin = () => {
         setToggle('toggle')
@@ -25,6 +34,26 @@ export default function Signin() {
         setToggleBtnStd('toggle-btn std')
     }
 
+    const signInHandler = async (e) => {
+        e.preventDefault()
+
+        const email = emailRef.current.value
+        const password = passwordRef.current.value
+
+
+        dispatch({type: "SIGNIN_START"})
+        try{
+            const res = await axios.post(SV+"/auth/signin", {email, password})
+            if(res.data === "success"){
+                const user = await axios.get(SV+"/auth/user")
+                dispatch({type: "SINGIN_SUCCESS", payload: user})
+            }
+        }
+        catch(err){
+            dispatch({type: "SIGNIN_FAILURE", payload: err})
+        }
+    }
+
     return (
         <>
         <div className="signin-container">
@@ -38,13 +67,13 @@ export default function Signin() {
                 </div>
 
 
-                <form action="" className={others}>
+                <form className={others} onSubmit={signInHandler}>
                     <div className="form-group">
-                        <input type="text" placeholder="Username"/>
+                        <input type="text" placeholder="Email" ref={emailRef}/>
                     </div>
                     <br/>
                     <div className="form-group">  
-                        <input type="password" placeholder="Password"/>
+                        <input type="password" placeholder="Password" ref={passwordRef}/>
                     </div>
                     <button className="submit-btn" type="submit">Sign in</button>
                 </form>
