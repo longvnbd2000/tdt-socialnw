@@ -1,10 +1,13 @@
 import * as React from 'react'
-import {Search, Notifications, Person, Home, NotificationImportant, PersonAdd, Settings, Logout} from '@mui/icons-material'
+import {Search, Notifications, Person, Home, NotificationImportant, PersonAdd, Settings, Logout, AddAlert} from '@mui/icons-material'
 import {Menu, MenuItem, Avatar, Divider, ListItemIcon, List, ListItemAvatar, ListItemText, Typography, ListItemButton} from '@mui/material'
 import './Navbar.css'
 import { Link } from 'react-router-dom'
+import { AuthContext } from '../../context/AuthContext'
 
 export default function Navbar() {
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER
+
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [anchorE2, setAnchorE2] = React.useState(null);
     const [anchorE3, setAnchorE3] = React.useState(null);
@@ -31,6 +34,13 @@ export default function Navbar() {
     const handleCloseE3 = () => {
         setAnchorE3(null);
     };
+
+    const { user } = React.useContext(AuthContext)
+
+    const logoutHandler = () => {
+        localStorage.clear()
+        window.location.reload()
+    }
 
     return (
         <div className="navbarContainer">
@@ -293,8 +303,8 @@ export default function Navbar() {
                     </Menu>
                 </div>
                 <div className="navbar-user" onClick={handleClickE2}>
-                    <div className="navbar-user-name">Shun Lung</div>
-                    <img src="/assets/avatar/ok.jpg" alt="" className="navbar-avatar" />
+                    <div className="navbar-user-name">{user.username}</div>
+                    <img src={PF+user.avatar} alt="" className="navbar-avatar" />
                 </div>
                 
                 <Menu
@@ -332,33 +342,49 @@ export default function Navbar() {
                     transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
+                    <Link to={"/profile/" + user.emailname}>
+                        <MenuItem>
+                        <Avatar src={PF+user.avatar} /> Profile
+                        </MenuItem>
+                    </Link>
+                    
                     <MenuItem>
-                    <Avatar /> Profile
-                    </MenuItem>
-                    <MenuItem>
-                    <Avatar /> My account
+                    <Avatar src={PF+user.avatar} /> My account
                     </MenuItem>
                     <Divider />
-                    <MenuItem>
-                    <ListItemIcon>
-                        <PersonAdd fontSize="small" />
-                    </ListItemIcon>
-                    Add another account
-                    </MenuItem>
+                    {user.role === 'admin' 
+                        ? <MenuItem>
+                        <ListItemIcon>
+                            <PersonAdd fontSize="small" />
+                        </ListItemIcon>
+                        Create account
+                        </MenuItem>
+                        : user.role === 'faculty'
+                        ? <MenuItem>
+                        <ListItemIcon>
+                        <AddAlert fontSize="small" />
+                        </ListItemIcon>
+                        Create announment
+                        </MenuItem>
+                        : null
+                    }
+                    
                     <MenuItem>
                     <ListItemIcon>
                         <Settings fontSize="small" />
                     </ListItemIcon>
                     Settings
                     </MenuItem>
-                    <Link to="/">
-                    <MenuItem>
+                    
+                    <MenuItem onClick={logoutHandler} >
                     <ListItemIcon>
                         <Logout fontSize="small" />
                     </ListItemIcon>
                     Logout
                     </MenuItem>
-                    </Link>
+                
+                    
+                    
                 </Menu>
             </div>
         </div>

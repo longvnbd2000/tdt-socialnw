@@ -2,13 +2,17 @@ import * as React from 'react'
 import { MoreVert, ThumbUpAlt, Comment, Settings} from '@mui/icons-material'
 import { IconButton, MenuItem, Menu, ListItemIcon, Divider, CircularProgress} from '@mui/material'
 import './Post.css'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from 'axios'
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
 
 export default function Post({ post }) {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
+    const SV = process.env.REACT_APP_SV_HOST
+
+    const { user } = useContext(AuthContext)
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -19,14 +23,20 @@ export default function Post({ post }) {
       setAnchorEl(null);
     };
 
-    const [user, setUser] = useState({})
+    const [userPost, setUserPost] = useState({})
     const [likes, setLikes] = useState(0)
+    const [isLiked, setIsLiked] = useState(false)
+
+    useEffect(() => {
+        setIsLiked(post.likes.includes(user._id))
+    }, [user._id, post.likes])
+
     useEffect(() => {
         let isActive = true
         const fetchUser = async () => {
-            const res = await axios.get(process.env.REACT_APP_SV_HOST + '/users?userId=' + post.userId)
+            const res = await axios.get(SV + '/users?userId=' + post.userId)
             if (isActive) {
-                setUser(res.data)
+                setUserPost(res.data)
                 setLikes(post.likes.length)
             }
         }
@@ -35,19 +45,25 @@ export default function Post({ post }) {
     }, [post.userId])
 
 
-    const likeClickHandle = () => {
-        
-        setLikes(likes + 1)
+    const likeClickHandle = async () => {
+        try{
+            await axios.put(SV + '/posts/' + post._id + '/like', {userId: user._id})
+        }
+        catch(err){
+
+        }
+        setLikes(!isLiked ? likes + 1 : likes - 1)
+        setIsLiked(!isLiked)
     }
 
     return (
         <div className="post">
             <div className="post-top">
-                <Link to={'/profile/' + user.emailname}>
+                <Link to={'/profile/' + userPost.emailname}>
                 <div className="post-top-left">
-                    {user.avatar? <img src={PF+user.avatar} alt="" className="post-top-avatar" /> : <CircularProgress />}
+                    {userPost.avatar ? <img src={PF+userPost.avatar} alt="" className="post-top-avatar" /> : <CircularProgress />}
                     <div className="post-top-user">
-                        <p className="post-top-user-name">{user.username}</p>
+                        <p className="post-top-user-name">{userPost.username}</p>
                         <p className="post-top-user-time">5 mins ago</p>
                     </div>
                 </div>

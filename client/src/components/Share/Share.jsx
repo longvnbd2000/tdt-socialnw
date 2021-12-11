@@ -1,14 +1,20 @@
 import {Photo, Tag, AddReaction} from '@mui/icons-material'
 import './Share.css'
+import { useContext } from 'react'
+import { AuthContext } from '../../context/AuthContext'
 
 export default function Share() {
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER
+
+    const { user } = useContext(AuthContext)
+
     return (
         <div className="share">
             <div className="shareContainer">
                 <div className="share-top">
-                    <img src="/assets/avatar/ok.jpg" alt="" className="share-avatar" />
+                    <img src={PF+user.avatar} alt="" className="share-avatar" />
                     <div className="share-input">
-                        <input type="text" className="share-input-box" placeholder="What's on your mind, Shun Lung?" />
+                        <input type="text" className="share-input-box" placeholder={"What's on your mind, " + user.username + "?"} />
                     </div>
                     <div >
                         <button className="share-btn">Share</button>

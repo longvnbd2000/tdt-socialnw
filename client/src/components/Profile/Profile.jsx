@@ -16,7 +16,7 @@ export default function Profile({emailname}) {
         }
         fetchUser()
         return () => isActive = false
-    }, [])
+    }, [emailname])
 
     return (
         <div>

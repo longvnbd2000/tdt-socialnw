@@ -5,6 +5,7 @@ import { useState } from 'react'
 import {GoogleLogin} from 'react-google-login'
 import './Signin.css'
 import { AuthContext } from '../../context/AuthContext'
+import { CircularProgress } from '@mui/material'
 
 export default function Signin() {
 
@@ -44,9 +45,29 @@ export default function Signin() {
         dispatch({type: "SIGNIN_START"})
         try{
             const res = await axios.post(SV+"/auth/signin", {email, password})
-            if(res.data === "success"){
-                const user = await axios.get(SV+"/auth/user")
-                dispatch({type: "SINGIN_SUCCESS", payload: user})
+            if(res.data.code === "success"){
+                localStorage.setItem('userToken', res.data.userToken)
+                const user = await axios.get(SV+"/auth/user/" + localStorage.getItem('userToken'))
+                
+                dispatch({type: "SIGNIN_SUCCESS", payload: user.data})
+            }
+        }
+        catch(err){
+            dispatch({type: "SIGNIN_FAILURE", payload: err})
+        }
+    }
+
+    const googleRespone = async (res) => {
+        const userData = res.profileObj
+        
+        dispatch({type: "SIGNIN_START"})
+        try{
+            const res = await axios.post(SV+"/auth/signin/google", {authId: userData.googleId, email: userData.email, name: userData.name})
+            if(res.data.code === "success"){
+                localStorage.setItem('userToken', res.data.userToken)
+                const user = await axios.get(SV+"/auth/user/" + localStorage.getItem('userToken'))
+                console.log(user)
+                dispatch({type: "SIGNIN_SUCCESS", payload: user.data})
             }
         }
         catch(err){
@@ -75,13 +96,19 @@ export default function Signin() {
                     <div className="form-group">  
                         <input type="password" placeholder="Password" ref={passwordRef}/>
                     </div>
-                    <button className="submit-btn" type="submit">Sign in</button>
+                    <button className="submit-btn" type="submit">{ isFetching ? <CircularProgress color="secondary" size="20px" /> : "Sign in"}</button>
                 </form>
 
                 <div className={students}>
                     <div>@student.tdtu.edu.vn</div>
 
-                    <a href='http://localhost:8080/api/auth/google'>signin with google</a>
+                    <GoogleLogin 
+                        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+                        
+                        onSuccess={googleRespone}
+                        onFailure={googleRespone}
+                        cookiePolicy={'single_host_origin'}
+                    ></GoogleLogin>
                 </div>
                 
             </div>

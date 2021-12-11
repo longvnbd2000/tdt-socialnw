@@ -1,13 +1,19 @@
 import {Home} from '@mui/icons-material'
 import './Sidebar.css'
+import { useContext } from 'react'
+import { AuthContext } from '../../context/AuthContext'
 
 export default function Sidebar() {
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER
+
+    const { user } = useContext(AuthContext)
+
     return (
         <div className="sidebar">
             <div className="sidebar-items">
                 <div className="sidebar-user"> 
-                    <img src="/assets/avatar/ok.jpg" alt="" className="sidebar-user-avatar" />
-                    <div className="sidebar-user-name">Yu Shun Lung</div>
+                    <img src={PF+user.avatar} alt="" className="sidebar-user-avatar" />
+                    <div className="sidebar-user-name">{user.username}</div>
                 </div>
                 <ul className="sidebar-list">
                     <li className="sidebar-list-item">

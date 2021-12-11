@@ -1,6 +1,12 @@
 import './Rightbar.css'
+import { useContext } from 'react'
+import { AuthContext } from '../../context/AuthContext'
 
 export default function Rightbar() {
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER
+
+    const { user } = useContext(AuthContext)
+
     return (
         <div className="rightbar">
             <div className="rightbar-title">User Online</div>

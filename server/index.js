@@ -10,8 +10,15 @@ const postRoute = require('./routes/posts')
 const commentRoute = require('./routes/comments')
 const expressSession = require('express-session')
 const passport = require('passport')
+const cookieParser = require('cookie-parser')
+const cors = require('cors')
 
+const corsOptions = {
+    origin: true, 
+    credentials: true,
+};
 
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(helmet())
 app.use(expressSession({
@@ -19,6 +26,7 @@ app.use(expressSession({
     saveUninitialized: false,  
     secret: process.env.COOKIE_SECRET,  
 }))
+app.use(cookieParser())
 app.use(passport.initialize())
 app.use(passport.session())
 

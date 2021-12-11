@@ -12,12 +12,14 @@ export default function Feed({emailname}) {
     const [page, setPage] = useState(1)
     const [loading, setLoading] = useState(false);
     const [isEnd, setIsEnd] = useState(false)
+
+    const SV = process.env.REACT_APP_SV_HOST
     
 
     const fetchPosts = async () => {
         const res = emailname 
-        ? await axios.get(process.env.REACT_APP_SV_HOST + '/posts/profile/emailname/' + emailname + '/page/' + page + '/limit/10') 
-        : await axios.get(process.env.REACT_APP_SV_HOST + '/posts/timeline/page/' + page + '/limit/10') 
+        ? await axios.get(SV + '/posts/profile/emailname/' + emailname + '/page/' + page + '/limit/10') 
+        : await axios.get(SV + '/posts/timeline/page/' + page + '/limit/10') 
         const newPosts = posts.concat(res.data)
         if (newPosts.length == posts.length){
             setIsEnd(true)

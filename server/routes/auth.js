@@ -48,8 +48,9 @@ router.post('/signin', async(req, res) => {
         const accessTokenLife = process.env.ACCESS_TOKEN_LIFE
         const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET
         const accessToken = await jwtHelper.generateToken(userData, accessTokenSecret, accessTokenLife)
-        req.session.userToken = accessToken
-        res.status(200).json("success")
+
+        res.status(200).json({code: 'success', userToken: accessToken})
+        
     }
     catch(err){
         res.status(500).json(err)
@@ -57,10 +58,39 @@ router.post('/signin', async(req, res) => {
     
 })
 
-router.get('/user', async(req, res) => {
+router.post('/signin/google', async(req, res) => {
     try{
-        const jwt = req.session.userToken
-        console.log(req.session.userToken)
+        const user = await User.findOne({email: req.body.email})
+        if(!user) {
+            const emailname = req.body.email.split('@')[0]
+            const newUser = new User({
+                authId: "google:" + req.body.authId,
+                email: req.body.email,
+                emailname: emailname,
+                username: req.body.name,
+            })
+            await newUser.save()
+        }
+        const getUser = await User.findOne({email: req.body.email})
+        const userData = {
+            _id: getUser._id,
+            username: getUser.username,
+            email: getUser.email,
+        }
+        const accessTokenLife = process.env.ACCESS_TOKEN_LIFE
+        const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET
+        const accessToken = await jwtHelper.generateToken(userData, accessTokenSecret, accessTokenLife)
+        
+        res.status(200).json({code: 'success', userToken: accessToken})
+    }
+    catch(err){
+        res.status(500).json(err)
+    }
+})
+
+router.get('/user/:userToken', async(req, res) => {
+    try{
+        const jwt = req.params.userToken
         const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET
         const decoded = await jwtHelper.verifyToken(jwt, accessTokenSecret)
         
@@ -73,55 +103,6 @@ router.get('/user', async(req, res) => {
     }
 })
 
-passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:8080/api/auth/google/callback"
-    },
-    function(accessToken, refreshToken, profile, done) {
-        const authId = 'google:' + profile.id;
-        User.findOne({ 'authId': authId })
-        .then(user => {
-            if(user) return done(null, user);
-            new User({
-                authId: authId,
-                username: profile.displayName,
-                email: profile.emails[0].value,
-                role: 'student',
-            }).save()
-            .then(user => done(null, user))
-            .catch(err => done(err, null));
-        })
-        .catch(err => {
-            if(err) return done(err, null);
-        });
-    }
-))
-passport.serializeUser(function(user, done) {
-    done(null, user._id);
-})
-  
-passport.deserializeUser((id, done) => {
-    User.findById(id)
-    .then(user => done(null, user))
-    .catch(err => done(err, null));
-})
-  
-router.get('/google', passport.authenticate('google', { scope: [
-    'https://www.googleapis.com/auth/userinfo.profile',
-    'https://www.googleapis.com/auth/userinfo.email'
-]}))
-
-
-router.get('/google/callback', passport.authenticate('google', { 
-    successRedirect: 'http://localhost:3000/',
-    failureRedirect: 'http://localhost:3000/signin' 
-}))
-
-//router.get('/google/logout', function(req, res){
-//    req.logout()
-//    res.redirect('http://localhost:3000/signin')
-//})
 
 
 module.exports = router
