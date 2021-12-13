@@ -11,28 +11,32 @@ router.get('/', (req, res) => {
 
 router.post('/register', async(req, res) => {
     try{
+        const user = await User.findOne({emailname: req.body.emailname})
+        if (user){
+            res.status(400).json("Username has been used")
+        }
         const salt = await bcrypt.genSalt(10)
         const hashedPass = await bcrypt.hash(req.body.password, salt)
-        const emailname = req.body.email.split('@')[0]
+
         const newUser = new User({
-            email: req.body.email,
-            emailname: emailname,
-            username: emailname,
-            password: hashedPass
+            emailname: req.body.emailname,
+            username: req.body.name,
+            password: hashedPass,
+            role: "faculty",
+            permissions: req.body.permissions
         })
 
-        const user = await newUser.save()
-        res.status(200).json(user)
+        const created = await newUser.save()
+        res.status(200).json("success")
     }
     catch (err){
-        console.log(err)
-        res.status(500).json("username has been used")
+        res.status(500).json("failed")
     }
 })
 
 router.post('/signin', async(req, res) => {
     try{
-        const user = await User.findOne({email: req.body.email})
+        const user = await User.findOne({emailname: req.body.emailname})
         if (!user){
             res.status(404).json("user not found")
         }
@@ -43,7 +47,7 @@ router.post('/signin', async(req, res) => {
         const userData = {
             _id: user._id,
             username: user.username,
-            email: user.email,
+            emailname: user.emailname,
         }
         const accessTokenLife = process.env.ACCESS_TOKEN_LIFE
         const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET

@@ -1,4 +1,4 @@
-.logo{
+.signin-logo{
     text-align: center;
     margin-top: 30px;
 
@@ -90,7 +90,7 @@
 .others.or{
     left: 50px;
 }
-.submit-btn{
+.signin-submit-btn{
     color: white;
     margin-top: 30px;
     width: 100%;
@@ -100,6 +100,6 @@
     cursor: pointer;
     background: linear-gradient(to right,#3778c2,#43e4c1);
 }
-.submit-btn:hover{
+.signin-submit-btn:hover{
     background: linear-gradient(to right,#6291c7,#74d8c2);
 }

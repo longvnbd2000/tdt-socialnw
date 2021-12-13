@@ -353,12 +353,15 @@ export default function Navbar() {
                     </MenuItem>
                     <Divider />
                     {user.role === 'admin' 
-                        ? <MenuItem>
-                        <ListItemIcon>
-                            <PersonAdd fontSize="small" />
-                        </ListItemIcon>
-                        Create account
-                        </MenuItem>
+                        ? <Link to="/register">
+                            <MenuItem>
+                            <ListItemIcon>
+                                <PersonAdd fontSize="small" />
+                            </ListItemIcon>
+                            Create account
+                            </MenuItem>
+                        </Link> 
+                        
                         : user.role === 'faculty'
                         ? <MenuItem>
                         <ListItemIcon>

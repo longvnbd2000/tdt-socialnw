@@ -16,7 +16,7 @@ export default function Signin() {
     const [others, setOthers] = useState('others')
 
     const SV = process.env.REACT_APP_SV_HOST
-    const emailRef = useRef()
+    const emailnameRef = useRef()
     const passwordRef = useRef()
     const {isFetching, error, dispatch} = useContext(AuthContext)
 
@@ -38,13 +38,13 @@ export default function Signin() {
     const signInHandler = async (e) => {
         e.preventDefault()
 
-        const email = emailRef.current.value
+        const emailname = emailnameRef.current.value
         const password = passwordRef.current.value
 
 
         dispatch({type: "SIGNIN_START"})
         try{
-            const res = await axios.post(SV+"/auth/signin", {email, password})
+            const res = await axios.post(SV+"/auth/signin", {emailname, password})
             if(res.data.code === "success"){
                 localStorage.setItem('userToken', res.data.userToken)
                 const user = await axios.get(SV+"/auth/user/" + localStorage.getItem('userToken'))
@@ -80,7 +80,7 @@ export default function Signin() {
         <div className="signin-container">
             
             <div className="signin-form">
-                <h1 className="logo">TDTU</h1>
+                <h1 className="signin-logo">TDTU</h1>
                 <div className="toggle-box">
                     <div className={toggle}></div>
                     <button type="button" className={toggleBtnStd} onClick={studentSignin}>Students</button>
@@ -90,13 +90,13 @@ export default function Signin() {
 
                 <form className={others} onSubmit={signInHandler}>
                     <div className="form-group">
-                        <input type="text" placeholder="Email" ref={emailRef}/>
+                        <input type="text" placeholder="Username" ref={emailnameRef}/>
                     </div>
                     <br/>
                     <div className="form-group">  
                         <input type="password" placeholder="Password" ref={passwordRef}/>
                     </div>
-                    <button className="submit-btn" type="submit">{ isFetching ? <CircularProgress color="secondary" size="20px" /> : "Sign in"}</button>
+                    <button className="signin-submit-btn" type="submit">{ isFetching ? <CircularProgress color="secondary" size="20px" /> : "Sign in"}</button>
                 </form>
 
                 <div className={students}>

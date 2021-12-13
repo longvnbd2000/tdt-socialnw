@@ -7,12 +7,12 @@ const UserSchema = new mongoose.Schema({
     },
     email:{
         type: String, 
-        require: true,
         max: 100,
         unique: true
     },
     emailname:{
         type: String,
+        required: true,
         unique: true
     },
     username:{
@@ -34,6 +34,9 @@ const UserSchema = new mongoose.Schema({
     role:{
         type: String,
         default: "student"
+    },
+    permissions:{
+        type: Array
     }
 },
 {timestamps: true})
