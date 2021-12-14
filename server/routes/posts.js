@@ -4,7 +4,7 @@ const User = require('../models/user')
 
 //create post
 router.post('/', async(req, res) => {
-    const newPost = new Post(req.body)
+    const newPost = new Post(req.body.newPost)
     try{
         const post = await newPost.save()
         res.status(200).json(post)
@@ -34,7 +34,7 @@ router.put('/:id', async(req, res) => {
 })
 
 //delete post
-router.delete('/:id', async(req, res) => {
+router.post('/:id', async(req, res) => {
     try{
         const post = await Post.findById(req.params.id)
         if(post.userId == req.body.userId){
@@ -89,7 +89,7 @@ router.get('/timeline/page/:page/limit/:limit', async(req, res) => {
         res.status(200).json(allPost)
     }
     catch(err){
-        res.status(500).json(err)
+        res.status(500).json([])
     }
 })
 
@@ -105,7 +105,7 @@ router.get('/profile/emailname/:emailname/page/:page/limit/:limit', async(req, r
         res.status(200).json(allPost)
     }
     catch(err){
-        res.status(500).json(err)
+        res.status(500).json([])
     }
 })
 

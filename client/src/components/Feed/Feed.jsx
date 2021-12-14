@@ -2,44 +2,76 @@ import Profile from "../Profile/Profile";
 import Post from "../Post/Post";
 import Share from "../Share/Share";
 import './Feed.css'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from 'axios'
-import { CircularProgress, Fade } from '@mui/material'
+import { CircularProgress } from '@mui/material'
+import { PostContext } from "../../context/PostContext";
+import { CheckCircleOutline } from "@mui/icons-material";
 
 
 export default function Feed({emailname}) {
-    const [posts, setPosts] = useState([])
     const [page, setPage] = useState(1)
-    const [loading, setLoading] = useState(false);
     const [isEnd, setIsEnd] = useState(false)
+
+
+    const {posts, isFetching, dispatch} = useContext(PostContext)
 
     const SV = process.env.REACT_APP_SV_HOST
     
 
     const fetchPosts = async () => {
-        const res = emailname 
-        ? await axios.get(SV + '/posts/profile/emailname/' + emailname + '/page/' + page + '/limit/10') 
-        : await axios.get(SV + '/posts/timeline/page/' + page + '/limit/10') 
-        const newPosts = posts.concat(res.data)
-        if (newPosts.length == posts.length){
-            setIsEnd(true)
-        }else setPosts(newPosts)
+        try{
+            
+            const res = emailname 
+            ? await axios.get(SV + '/posts/profile/emailname/' + emailname + '/page/' + page + '/limit/10')
+            : await axios.get(SV + '/posts/timeline/page/' + page + '/limit/10') 
+            const newPosts = posts.concat(res.data)
+            console.log(page)
+            if (newPosts.length === posts.length){
+                setIsEnd(true)
+                
+            }
+            if (newPosts.length > posts.length && page === 1){
+                dispatch({type: "POST_START"})
+                dispatch({type: "POST_SUCCESS", payload: [...res.data]})
+            }else{
+                dispatch({type: "POST_SUCCESS", payload: [...posts, ...res.data]})
+            }
+            
+            
+        }
+        catch(err){
+            dispatch({type: "POST_FAILURE", payload: err})
+        }
+        
     }
 
-
     useEffect(() => {
-        
         fetchPosts()
         
     }, [page])
 
-    useEffect(() => {
-        window.onscroll = () => {
-            let isBottom = (document.documentElement.scrollTop + window.innerHeight) === document.documentElement.offsetHeight
-            if(isBottom && !isEnd){ 
+
+    const handleScroll = () => {
+        const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight
+        setTimeout(() => {
+            if (bottom && !isEnd) {
                 setPage(page + 1)
             }
-        }
+        }, 100)
+        
+        
+    }
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll, {
+            passive: true
+        });
+      
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+        
     }, [posts])
     
 
@@ -50,12 +82,7 @@ export default function Feed({emailname}) {
                 {posts.map((p) => (
                     <Post key={p._id} post={p} />
                 ))}
-                <Fade
-                    in={loading}
-                    unmountOnExit
-                >
-                    <CircularProgress />
-                </Fade>
+                
             </> 
         )
     }
@@ -64,19 +91,22 @@ export default function Feed({emailname}) {
         return(
             <>
                 <Profile emailname={emailname}/>
-                <Share/>
+                <Share/>     
                 {posts.map((p) => (
                     <Post key={p._id} post={p} />
                 ))}
+                
             </> 
         )
     }
 
     return (
-        
-        <div className="feed">
+        isFetching
+        ? <CircularProgress/>
+        : <div className="feed">
             <div className="feed-items">
-                {emailname ? <ProfileFeed/> : <HomeFeed/>}          
+                {emailname ? <ProfileFeed/> : <HomeFeed/>} 
+                {isEnd ? <div className="feed-end"><CheckCircleOutline /> No more posts to load </div> : null}        
             </div>
         </div>
     )

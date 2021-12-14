@@ -12,14 +12,17 @@ const expressSession = require('express-session')
 const passport = require('passport')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
+const multer = require('multer')
+const path = require('path')
 
 const corsOptions = {
     origin: true, 
     credentials: true,
 };
-
+app.use("/images", express.static(path.join(__dirname, "public/images")))
 app.use(cors(corsOptions))
 app.use(express.json())
+app.use(express.urlencoded({ extended: false }));
 app.use(helmet())
 app.use(expressSession({
     resave: false,   
@@ -29,6 +32,26 @@ app.use(expressSession({
 app.use(cookieParser())
 app.use(passport.initialize())
 app.use(passport.session())
+
+
+const postStorage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        callback(null, "public/images/post")
+    },
+    filename: (req, file, callback) => {
+        callback(null, req.body.name)
+    }
+})
+const postUpload = multer({postStorage})
+app.post('/api/upload/post', postUpload.single("file"), (req, res) => {
+    try{
+        res.json("file uploaded")
+    }
+    catch(err){
+        console.log(err)
+    }
+})
+
 
 app.use('/api/users', userRoute)
 app.use('/api/auth', authRoute)

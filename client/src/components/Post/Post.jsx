@@ -6,6 +6,8 @@ import { useState, useEffect, useContext } from "react";
 import axios from 'axios'
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import { format } from 'timeago.js'
+import { PostContext } from '../../context/PostContext';
 
 
 export default function Post({ post }) {
@@ -13,6 +15,7 @@ export default function Post({ post }) {
     const SV = process.env.REACT_APP_SV_HOST
 
     const { user } = useContext(AuthContext)
+    const { posts, dispatch } = useContext(PostContext)
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -56,6 +59,16 @@ export default function Post({ post }) {
         setIsLiked(!isLiked)
     }
 
+    const deleteHandle = async () => {
+        try{
+            await axios.post(SV + '/posts/' + post._id, {userId: user._id})
+            dispatch({type: "POST_SUCCESS", payload: posts.filter(p => p._id !== post._id)})
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+
     return (
         <div className="post">
             <div className="post-top">
@@ -64,7 +77,7 @@ export default function Post({ post }) {
                     {userPost.avatar ? <img src={PF+userPost.avatar} alt="" className="post-top-avatar" /> : <CircularProgress />}
                     <div className="post-top-user">
                         <p className="post-top-user-name">{userPost.username}</p>
-                        <p className="post-top-user-time">5 mins ago</p>
+                        <p className="post-top-user-time">{format(post.createdAt)}</p>
                     </div>
                 </div>
                 </Link>
@@ -96,12 +109,16 @@ export default function Post({ post }) {
                     transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
-                    <MenuItem>
+                    {user._id === post.userId 
+                    ?<MenuItem onClick={deleteHandle}>
                     <ListItemIcon>
                         <Settings fontSize="small" />
                     </ListItemIcon>
-                    Add another account
+                    Delete post
                     </MenuItem>
+                    : null
+                    }
+                    
                     <MenuItem>
                     <ListItemIcon>
                         <Settings fontSize="small" />
