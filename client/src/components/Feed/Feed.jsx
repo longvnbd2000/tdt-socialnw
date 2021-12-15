@@ -31,13 +31,15 @@ export default function Feed({emailname}) {
                 setIsEnd(true)
                 
             }
-            if (newPosts.length > posts.length && page === 1){
-                dispatch({type: "POST_START"})
-                dispatch({type: "POST_SUCCESS", payload: [...res.data]})
-            }else{
-                dispatch({type: "POST_SUCCESS", payload: [...posts, ...res.data]})
+
+            if(page === 1){
+                dispatch({type: "POST_SUCCESS", payload: [...res.data] })
             }
-            
+            else{
+                const ps = [...posts, ...res.data]
+                const payload = ps.filter((object,index) => index === ps.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)))
+                dispatch({type: "POST_SUCCESS", payload: payload })
+            }  
             
         }
         catch(err){
