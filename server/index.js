@@ -42,7 +42,9 @@ const postStorage = multer.diskStorage({
         callback(null, req.body.name)
     }
 })
-const postUpload = multer({postStorage})
+const postUpload = multer({
+    storage: postStorage
+})
 app.post('/api/upload/post', postUpload.single("file"), (req, res) => {
     try{
         res.json("file uploaded")

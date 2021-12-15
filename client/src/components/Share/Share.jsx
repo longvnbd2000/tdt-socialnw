@@ -13,10 +13,17 @@ export default function Share() {
     const { posts, dispatch} = useContext(PostContext)
 
     const [file, setFile] = useState(null)
+    const [errorMessage, setErrorMessage] = useState("")
+
     const statusTextRef = useRef("")
 
     const submitHandle = async (e) => {
         e.preventDefault()
+        if(statusTextRef.current.value === "" || statusTextRef.current.value === null){
+            setErrorMessage("Please enter Username")
+            return false
+        }
+
         const newPost = {
             userId: user._id,
             text: statusTextRef.current.value

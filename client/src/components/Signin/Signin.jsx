@@ -14,6 +14,7 @@ export default function Signin() {
     const [toggleBtnOth, setToggleBtnOth] = useState('toggle-btn oth')
     const [students, setStudents] = useState('students')
     const [others, setOthers] = useState('others')
+    const [errorMessage, setErrorMessage] = useState("")
 
     const SV = process.env.REACT_APP_SV_HOST
     const emailnameRef = useRef()
@@ -41,6 +42,14 @@ export default function Signin() {
         const emailname = emailnameRef.current.value
         const password = passwordRef.current.value
 
+        if(emailname === "" || emailname === null){
+            setErrorMessage("Please enter Username")
+            return false
+        }
+        if(password === "" || password === null){
+            setErrorMessage("Please enter Password")
+            return false
+        }
 
         dispatch({type: "SIGNIN_START"})
         try{
