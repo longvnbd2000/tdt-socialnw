@@ -9,6 +9,7 @@ import { AuthContext } from "./context/AuthContext";
 import { PostContext } from "./context/PostContext";
 import axios from "axios";
 import Register from "./pages/Register/Register";
+import CreateAnnouncement from "./pages/CreateAnnouncement/CreateAnnouncement";
 
 function App() {
   const SV = process.env.REACT_APP_SV_HOST
@@ -40,11 +41,13 @@ function App() {
 
         <Route path="/signin" element={  user ? <Navigate to="/" /> : <SigninPage />} />   
 
-        <Route path="/announcement" element={  user ? <Announcement/> : <SigninPage />} />    
+        <Route path="/announcement" element={  user ? <Announcement/> : <SigninPage />} />  
+
+        <Route path="/announcement/create" element={  user && user.role === "faculty" ? <CreateAnnouncement/> : <SigninPage />} />   
 
         <Route path="/profile/:emailname" element={  user ? <Profile /> : <SigninPage />} />
 
-        <Route path="/register" element={ user && user.role == "admin" ? <Register /> : <Navigate to="/" />} />
+        <Route path="/register" element={ user && user.role === "admin" ? <Register /> : <Navigate to="/" />} />
 
         <Route path="*" element={<Navigate to ="/" />}/>
       </Routes>

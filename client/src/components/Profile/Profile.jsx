@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef, useContext} from 'react'
 import './Profile.css'
 import axios from 'axios'
 
@@ -13,14 +13,22 @@ import {Avatar, Button, TextField, Dialog,
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
+import { AuthContext } from '../../context/AuthContext';
+
 export default function Profile({emailname}) {
 
+    const {user, dispatch} = useContext(AuthContext)
+
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
-    const [user, setUser] = useState({})
+    const SV = process.env.REACT_APP_SV_HOST
+    const [userProfile, setUserProfile] = useState({})
     const [open, setOpen] = useState(false)
-    const [avt, setAvt] = useState({ profileImage:PF+user.avatar})
-    const [major, setMajor] = useState('')
-    const [date, setDate] = useState(null)
+    const [avtFile, setAvtFile] = useState(null)
+    const [errorMessage, setErrorMessage] = useState('')
+    const [avt, setAvt] = useState({ profileImage:PF+userProfile.avatar})
+    const [major, setMajor] = useState(user.major)
+    const [date, setDate] = useState(new Date(user.birthday))
+
     const {profileImage} = avt
 
     const ITEM_HEIGHT = 48;
@@ -40,18 +48,21 @@ export default function Profile({emailname}) {
         const fetchUser = async () => {
             const res = await axios.get(process.env.REACT_APP_SV_HOST + '/users?emailname=' + emailname)
             if (isActive) {
-                setUser(res.data)
+                setUserProfile(res.data)
             }
         }
         fetchUser()
         return () => isActive = false
     }, [emailname])
+    
 
     const clickOpen = () => {
         setOpen(true)
+        setAvt({profileImage: PF+userProfile.avatar})
     }
     const clickClose = () => {
         setOpen(false)
+        setAvt({profileImage: PF+userProfile.avatar})
     }
 
     const fileSelected = event => {
@@ -60,38 +71,99 @@ export default function Profile({emailname}) {
 
     const imageHandler = event => {
         const reader = new FileReader()
+
         reader.onload = () => {
             if(reader.readyState === 2){
                 setAvt({profileImage: reader.result})
-            }else{
-                setAvt({profileImage: PF+user.avatar})
+                console.log(reader.result)
             }
         }
         reader.readAsDataURL(event.target.files[0])
+        setAvtFile(event.target.files[0])
     }
 
     const handleChangeMajor = (event) => {
         setMajor(event.target.value);
-      };
+    };
+
+
+    const [nameRef, setNameRef] = useState(user.username)
+    const [classNameRef, setClassNameRef] = useState(user.className)
+
+    const editProfileHandler = async (e) => {
+        e.preventDefault()
+        const userToUpdate = user
+
+        console.log(nameRef)
+        console.log(classNameRef)
+        console.log(major)
+        if(nameRef === "" || nameRef === null){
+            setErrorMessage("Name can not be empty")
+            console.log(errorMessage)
+            return false
+        }
+        else{
+            if(avtFile){
+                const data = new FormData()
+                const fileName = Date.now() + "_" + avtFile.name
+                data.append("name", fileName)
+                data.append("file", avtFile)
+                userToUpdate.avatar = "avatar/" + fileName
+                try{
+                    await axios.post(SV + "/upload/avatar", data)
+                }
+                catch(err){
+                    console.log(err)
+                }
+            }
+    
+            userToUpdate.username = nameRef
+            userToUpdate.className = classNameRef
+            userToUpdate.major = major
+            userToUpdate.birthday = date.toLocaleDateString("en-US")
+    
+            try{
+                await axios.put(SV + "/users/" + user._id, userToUpdate)
+                dispatch({type: "SIGNIN_SUCCESS", payload: userToUpdate})
+            }
+            catch(err){
+                console.log(err)
+            }
+        }
+       
+        
+    }
+
+
     return (
         <div>
             <div className="profile">
                 <div className="profile-cover">
-                    <img src={PF+user.background} alt="" className="profile-cover-background" />
-                    <img src={PF+user.avatar} alt="" className="profile-cover-avatar" />
+                    <img src={PF+userProfile.background} alt="" className="profile-cover-background" />
+                    <img src={PF+userProfile.avatar} alt="" className="profile-cover-avatar" />
                 </div>
                 <div className="profile-user">
-                    <h2 className="profile-user-name">{user.username}</h2>
-                    <Tooltip title="Click to update profile">
-                        <IconButton onClick={clickOpen}>
-                            <Edit fontSize="small" />
-                        </IconButton>
-                    </Tooltip>
+                    <div className="profile-user-name">
+                        {user.emailname === emailname
+                        ? <>
+                        <div className="profile-user-name-box">t</div>
+                        <h2 >{userProfile.username}</h2>
+                        <Tooltip title="Click to update profile">
+                            <IconButton onClick={clickOpen}>
+                                <Edit fontSize="small" />
+                            </IconButton>
+                        </Tooltip>
+                        </>
+                        : <h2 >{userProfile.username}</h2>
+                        }
+                        
+                    </div>
+                    
                     <Dialog open={open} onClose={clickOpen}>
                         <DialogTitle>Cập nhật thông tin</DialogTitle>
-                          
+                            <div className='profile-avatar-upload'>
                             <input accept="image/*" id="icon-button-file" type="file" style={{ display: 'none' }} onChange={imageHandler} />
-                            <label htmlFor="icon-button-file" style={{ width: '100%', textAlign: 'center' }}>
+                            <label htmlFor="icon-button-file" style={{  textAlign: 'center' }}>
                                 <IconButton component="span" >
                                     <Avatar
                                         src={profileImage} 
@@ -99,6 +171,8 @@ export default function Profile({emailname}) {
                                     />
                                 </IconButton>
                             </label>
+                            </div>
+                            
                             <DialogContent>
                                 <Box
                                 component="form"
@@ -108,8 +182,8 @@ export default function Profile({emailname}) {
                                 autoComplete="off"
                                 >
                                     <div>
-                                        <TextField required id="outlined-required" label="Tên" defaultValue={user.username}/>
-                                        <TextField id="outlined-required" label="Lớp" defaultValue="18050402"/>
+                                        <TextField required id="outlined-required" label="Tên" defaultValue={user.username} onChange={(e) => setNameRef(e.target.value)} />
+                                        <TextField id="outlined-required" label="Lớp" defaultValue={user.className}onChange={(e) => setClassNameRef(e.target.value)} />
                                         <FormControl sx={{m: 2, width: '25ch'}}>
                                             <InputLabel id="demo-simple-select-label">Khoa</InputLabel>
                                                 <Select
@@ -118,6 +192,7 @@ export default function Profile({emailname}) {
                                                 value={major}
                                                 label="Khoa"
                                                 onChange={handleChangeMajor}
+                                                defaultValue={major}
                                                 MenuProps={MenuProps}
                                                 >
                                                     <MenuItem value={'CNTT'}>CNTT</MenuItem>
@@ -143,6 +218,7 @@ export default function Profile({emailname}) {
                                             <DatePicker
                                                 label="Ngày/Tháng/Năm sinh"
                                                 value={date}
+                                                defaultValue={date}
                                                 onChange={(newValue) => {
                                                 setDate(newValue);
                                                 }}
@@ -153,19 +229,19 @@ export default function Profile({emailname}) {
                                 </Box>
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={clickClose}>Hủy</Button>
-                                <Button onClick={clickClose} type='submit'  >Cập nhật</Button>
+                                <Button onClick={clickClose} >Hủy</Button>
+                                <Button onClick={editProfileHandler} type='submit'>Cập nhật</Button>
                             </DialogActions>
                         </Dialog>
-                    <div className="profile-user-email">{user.email}</div>
+                    <div className="profile-user-email">{userProfile.email}</div>
                 </div>
                 <div className="profile-info">
                     <div className="profile-info-left">
-                        <div className="profile-info-text">Khoa Công nghệ thông tin</div>
-                        <div className="profile-info-text">Lớp: 18050203</div>
+                        <div className="profile-info-text">Khoa {userProfile.major}</div>
+                        <div className="profile-info-text">Lớp: {userProfile.className}</div>
                     </div>
                     <div className="profile-info-right">
-                        <div className="profile-info-text">Ngay sinh</div>
+                        <div className="profile-info-text">Ngay sinh: {userProfile.birthday}</div>
                         <div className="profile-info-text">Noi o</div>
                     </div>
                     

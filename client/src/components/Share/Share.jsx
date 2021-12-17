@@ -13,7 +13,7 @@ export default function Share() {
     const { posts, dispatch} = useContext(PostContext)
 
     const [file, setFile] = useState(null)
-    const [errorMessage, setErrorMessage] = useState("")
+    const [errorMessage, setErrorMessage] = useState('')
 
     const statusTextRef = useRef("")
 

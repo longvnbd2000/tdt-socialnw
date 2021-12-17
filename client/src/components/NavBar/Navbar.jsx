@@ -344,13 +344,10 @@ export default function Navbar() {
                 >
                     <Link to={"/profile/" + user.emailname}>
                         <MenuItem>
-                        <Avatar src={PF+user.avatar} /> Profile
+                        <Avatar src={PF+user.avatar} /> My Account
                         </MenuItem>
                     </Link>
                     
-                    <MenuItem>
-                    <Avatar src={PF+user.avatar} /> My account
-                    </MenuItem>
                     <Divider />
                     {user.role === 'admin' 
                         ? <Link to="/register">
@@ -363,12 +360,14 @@ export default function Navbar() {
                         </Link> 
                         
                         : user.role === 'faculty'
-                        ? <MenuItem>
-                        <ListItemIcon>
-                        <AddAlert fontSize="small" />
-                        </ListItemIcon>
-                        Create announment
-                        </MenuItem>
+                        ? <Link to="/announcement/create">
+                            <MenuItem>
+                            <ListItemIcon>
+                            <AddAlert fontSize="small" />
+                            </ListItemIcon>
+                            Create announment
+                            </MenuItem>
+                        </Link>
                         : null
                     }
                     

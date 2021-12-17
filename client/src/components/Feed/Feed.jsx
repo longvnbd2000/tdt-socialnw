@@ -7,6 +7,7 @@ import axios from 'axios'
 import { CircularProgress } from '@mui/material'
 import { PostContext } from "../../context/PostContext";
 import { CheckCircleOutline } from "@mui/icons-material";
+import { AuthContext } from "../../context/AuthContext";
 
 
 export default function Feed({emailname}) {
@@ -15,6 +16,7 @@ export default function Feed({emailname}) {
 
 
     const {posts, isFetching, dispatch} = useContext(PostContext)
+    const {user} = useContext(AuthContext)
 
     const SV = process.env.REACT_APP_SV_HOST
     
@@ -51,7 +53,7 @@ export default function Feed({emailname}) {
     useEffect(() => {
         fetchPosts()
         
-    }, [page])
+    }, [page, emailname])
 
 
     const handleScroll = () => {
@@ -93,7 +95,7 @@ export default function Feed({emailname}) {
         return(
             <>
                 <Profile emailname={emailname}/>
-                <Share/>     
+                {user.emailname === emailname ? <Share/>  : null}    
                 {posts.map((p) => (
                     <Post key={p._id} post={p} />
                 ))}

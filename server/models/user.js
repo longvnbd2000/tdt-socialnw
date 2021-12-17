@@ -37,6 +37,15 @@ const UserSchema = new mongoose.Schema({
     },
     permissions:{
         type: Array
+    },
+    className:{
+        type: String
+    },
+    major:{
+        type: String
+    },
+    birthday:{
+        type: String
     }
 },
 {timestamps: true})

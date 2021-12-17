@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { MoreVert, ThumbUpAlt, Comment, Settings} from '@mui/icons-material'
-import { IconButton, MenuItem, Menu, ListItemIcon, Divider, CircularProgress} from '@mui/material'
+import { IconButton, MenuItem, Menu, ListItemIcon, Divider, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Slide, Button} from '@mui/material'
 import './Post.css'
 import { useState, useEffect, useContext } from "react";
 import axios from 'axios'
@@ -17,13 +17,25 @@ export default function Post({ post }) {
     const { user } = useContext(AuthContext)
     const { posts, dispatch } = useContext(PostContext)
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
       setAnchorEl(null);
+    };
+
+    const [openDelConfirm, setOpenDelConfirm] = useState(false);
+    const Transition = React.forwardRef(function Transition(props, ref) {
+        return <Slide direction="up" ref={ref} {...props} />;
+    });
+    const handleClickOpenDelConfirm = () => {
+        setOpenDelConfirm(true);
+    };
+    
+    const handleCloseDelConfirm = () => {
+        setOpenDelConfirm(false);
     };
 
     const [userPost, setUserPost] = useState({})
@@ -69,8 +81,22 @@ export default function Post({ post }) {
         }
     }
 
+
     return (
+
         <div className="post">
+            <Dialog open={openDelConfirm} onClose={handleCloseDelConfirm}>
+                <DialogTitle>Delete Confirmation</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Do you want to delete this post?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={deleteHandle}>Confirm</Button>
+                    <Button onClick={handleCloseDelConfirm}>Cancel</Button>
+                </DialogActions>
+            </Dialog>
             <div className="post-top">
                 <Link to={'/profile/' + userPost.emailname}>
                 <div className="post-top-left">
@@ -92,6 +118,9 @@ export default function Post({ post }) {
                 >
                     <MoreVert />
                 </IconButton>
+                
+                
+                
                 <Menu
                     id="long-menu"
                     MenuListProps={{
@@ -100,6 +129,7 @@ export default function Post({ post }) {
                     anchorEl={anchorEl}
                     open={open}
                     onClose={handleClose}
+                    onClick={handleClose}
                     PaperProps={{
                     style: {
                         maxHeight: 60 * 4.5,
@@ -110,26 +140,34 @@ export default function Post({ post }) {
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
                     {user._id === post.userId 
-                    ?<MenuItem onClick={deleteHandle}>
+                    ?
+                    <MenuItem onClick={handleClickOpenDelConfirm}>
                     <ListItemIcon>
                         <Settings fontSize="small" />
                     </ListItemIcon>
                     Delete post
-                    </MenuItem>
+                    </MenuItem>     
                     : null
                     }
+                    
+                    {user._id === post.userId 
+                    ?
+                    <MenuItem>
+                    <ListItemIcon>
+                        <Settings fontSize="small" />
+                    </ListItemIcon>
+                    Edit Post
+                    </MenuItem>
+                    
+                    : null
+                    }
+            
                     
                     <MenuItem>
                     <ListItemIcon>
                         <Settings fontSize="small" />
                     </ListItemIcon>
-                    Settings
-                    </MenuItem>
-                    <MenuItem>
-                    <ListItemIcon>
-                        <Settings fontSize="small" />
-                    </ListItemIcon>
-                    Logout
+                    Report
                     </MenuItem>
                     <Divider/>
                     <MenuItem>
@@ -186,6 +224,10 @@ export default function Post({ post }) {
                 </div>
                 
             </div>
+
+
         </div>
+
+        
     )
 }
