@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const Comment = require('../models/comment')
+const Post = require('../models/post')
 
 //Create comment
 router.post('/', async (req, res) => {
@@ -17,7 +18,7 @@ router.post('/', async (req, res) => {
 //Get post comments
 router.get('/:id', async (req, res) => {
     try{
-        const comments = await Comment.find({"postId" : req.params.id})
+        const comments = await Comment.find({"postId" : req.params.id}).sort([['createdAt', -1]])
         res.status(200).json(comments)    
     }
     catch(err){

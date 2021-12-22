@@ -26,10 +26,10 @@ export default function CreateAnnouncement() {
                 <form className='announce-form' action="">
                     <table className='announce-table'>
                         <tr><label htmlFor="announce-title"><h3>Tiêu đề</h3></label></tr>
-                        <tr><input type="text" name="announce-title" id="announce-title" /></tr>
+                        <tr><input type="text" name="announce-title" id="announce-title" className='announce-input-text'/></tr>
 
                         <tr><label htmlFor="announce-detail"><h3>Chi tiết</h3> </label></tr>
-                        <tr><textarea name="announce-detail" id="announce-detail" cols="110" rows="10"></textarea></tr>
+                        <tr><textarea name="announce-detail" id="announce-detail" cols="110" rows="10" className='announce-input-text'></textarea></tr>
 
                         <tr><label htmlFor="announce-file"><h3>Tệp tin đính kèm</h3></label></tr>
                         <tr>

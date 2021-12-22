@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { format } from 'timeago.js'
 import { PostContext } from '../../context/PostContext';
+import Comments from '../Comment/Comments'
 
 
 export default function Post({ post }) {
@@ -41,6 +42,7 @@ export default function Post({ post }) {
     const [userPost, setUserPost] = useState({})
     const [likes, setLikes] = useState(0)
     const [isLiked, setIsLiked] = useState(false)
+    const [comments, setComments] = useState([])
 
     useEffect(() => {
         setIsLiked(post.likes.includes(user._id))
@@ -80,6 +82,21 @@ export default function Post({ post }) {
             console.log(err)
         }
     }
+
+    
+
+    const fetchComment = async () => {
+        try{
+            const res = await axios.get(SV + '/comments/' + post._id)
+            setComments(res.data)
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+    useEffect(() => {
+        fetchComment()
+    }, [])
 
 
     return (
@@ -208,7 +225,7 @@ export default function Post({ post }) {
                         <span className="post-bottom-count-text">{likes}</span> 
                     </div>
                     <div className="post-bottom-count-comments">
-                    20 comments
+                        {comments.length + ' comments'} 
                     </div>
                 </div>
                 <hr />
@@ -222,6 +239,12 @@ export default function Post({ post }) {
                         <span className="post-bottom-like-comment-text">Comment</span>
                     </div>
                 </div>
+                <hr />
+            </div>
+            <div className="post-comments">
+                {comments.map((comment) => (
+                    <Comments key={comment._id} comment={comment} />
+                ))}
                 
             </div>
 
