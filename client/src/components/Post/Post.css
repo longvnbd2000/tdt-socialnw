@@ -99,3 +99,10 @@ a{
     text-decoration: none;
     color: black;
 }
+
+.post-load-comments{
+    padding: 10px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: end;
+}

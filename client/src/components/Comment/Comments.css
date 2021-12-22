@@ -21,12 +21,19 @@
 }
 .comment-center{
     flex: 10;
-    background-color: rgb(219, 181, 255);
+    background-color: rgb(241, 241, 241);
     padding: 10px;
     border-radius: 5px;
 }
 .comment-name{
+    display: flex;
     font-weight: 500;
+    align-items: flex-end;
+}
+.comment-time{
+    margin-left: 5px;
+    font-size: 12px;
+    font-weight: 400;
 }
 .comment-text{
     margin: 8px;

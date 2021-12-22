@@ -4,6 +4,7 @@ import { IconButton, MenuItem, Menu, ListItemIcon, Divider } from '@mui/material
 import { AuthContext } from '../../context/AuthContext';
 import { useState, useEffect, useContext } from "react";
 import axios from 'axios';
+import { format } from 'timeago.js'
 
 export default function Comments({ comment }) {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
@@ -44,6 +45,7 @@ export default function Comments({ comment }) {
                     <div className="comment-center">
                         <div className="comment-name">
                             {userComment.username}
+                            <p className="comment-time">{format(comment.createdAt)}</p>
                         </div>
                         <div className="comment-text">{comment.text}</div>
                     </div>

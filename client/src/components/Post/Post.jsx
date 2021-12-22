@@ -43,6 +43,7 @@ export default function Post({ post }) {
     const [likes, setLikes] = useState(0)
     const [isLiked, setIsLiked] = useState(false)
     const [comments, setComments] = useState([])
+    const [page, setPage] = useState(0)
 
     useEffect(() => {
         setIsLiked(post.likes.includes(user._id))
@@ -86,9 +87,14 @@ export default function Post({ post }) {
     
 
     const fetchComment = async () => {
+        if(page === 0){
+            return () => console.log('No cmts')
+        }
         try{
-            const res = await axios.get(SV + '/comments/' + post._id)
-            setComments(res.data)
+            const res = await axios.get(SV + '/comments/pid/' + post._id + '/page/' + page)
+            const ps = [...comments, ...res.data]
+            const payload = ps.filter((object,index) => index === ps.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)))
+            setComments(payload)
         }
         catch(err){
             console.log(err)
@@ -96,8 +102,13 @@ export default function Post({ post }) {
     }
     useEffect(() => {
         fetchComment()
-    }, [])
+    }, [page])
 
+    const loadCmtHanlde = () => {
+        if(comments.length < post.comments.length || comments.length > post.comments.length){
+            setPage(page + 1)
+        }
+    }
 
     return (
 
@@ -225,7 +236,7 @@ export default function Post({ post }) {
                         <span className="post-bottom-count-text">{likes}</span> 
                     </div>
                     <div className="post-bottom-count-comments">
-                        {comments.length + ' comments'} 
+                        {post.comments.length + ' comments'} 
                     </div>
                 </div>
                 <hr />
@@ -245,7 +256,7 @@ export default function Post({ post }) {
                 {comments.map((comment) => (
                     <Comments key={comment._id} comment={comment} />
                 ))}
-                
+                <p className='post-load-comments' onClick={loadCmtHanlde}>load cmt</p>
             </div>
 
 

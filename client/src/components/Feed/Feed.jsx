@@ -28,7 +28,7 @@ export default function Feed({emailname}) {
             ? await axios.get(SV + '/posts/profile/emailname/' + emailname + '/page/' + page + '/limit/10')
             : await axios.get(SV + '/posts/timeline/page/' + page + '/limit/10') 
             const newPosts = posts.concat(res.data)
-            console.log(page)
+
             if (newPosts.length === posts.length){
                 setIsEnd(true)
                 

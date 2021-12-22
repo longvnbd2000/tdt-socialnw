@@ -8,6 +8,7 @@ router.post('/', async (req, res) => {
 
     try{
         const comment = await newComment.save()
+        await Post.findByIdAndUpdate(req.body.postId, { $push: { comments: req.body.userId}})
         res.status(200).json(comment)
     }
     catch(err){
@@ -16,10 +17,14 @@ router.post('/', async (req, res) => {
 })
 
 //Get post comments
-router.get('/:id', async (req, res) => {
+router.get('/pid/:id/page/:page', async (req, res) => {
     try{
-        const comments = await Comment.find({"postId" : req.params.id}).sort([['createdAt', -1]])
-        res.status(200).json(comments)    
+        let pid = req.params.id
+        let page = parseInt(req.params.page)
+        let skip = (page-1) * 5
+        const comments = await Comment.find({"postId" : pid}).sort([['createdAt', -1]]).skip(skip).limit(5)
+        
+        res.status(200).json(comments)
     }
     catch(err){
         res.status(500).json(err)
