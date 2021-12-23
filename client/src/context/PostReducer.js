@@ -16,7 +16,7 @@ export const PostReducer = (state, action) => {
             
         case "POST_FAILURE":
             return{
-                posts: null,
+                posts: [],
                 isFetching: false,
                 error: action.payload,
             }    

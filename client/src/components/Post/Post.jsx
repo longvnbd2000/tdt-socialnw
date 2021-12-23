@@ -2,7 +2,7 @@ import * as React from 'react'
 import { MoreVert, ThumbUpAlt, Comment, Settings} from '@mui/icons-material'
 import { IconButton, MenuItem, Menu, ListItemIcon, Divider, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Slide, Button} from '@mui/material'
 import './Post.css'
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import axios from 'axios'
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
@@ -28,9 +28,6 @@ export default function Post({ post }) {
     };
 
     const [openDelConfirm, setOpenDelConfirm] = useState(false);
-    const Transition = React.forwardRef(function Transition(props, ref) {
-        return <Slide direction="up" ref={ref} {...props} />;
-    });
     const handleClickOpenDelConfirm = () => {
         setOpenDelConfirm(true);
     };
@@ -44,6 +41,7 @@ export default function Post({ post }) {
     const [isLiked, setIsLiked] = useState(false)
     const [comments, setComments] = useState([])
     const [page, setPage] = useState(0)
+    const [isActive, setIsActive] = useState(false)
 
     useEffect(() => {
         setIsLiked(post.likes.includes(user._id))
@@ -107,6 +105,42 @@ export default function Post({ post }) {
     const loadCmtHanlde = () => {
         if(comments.length < post.comments.length || comments.length > post.comments.length){
             setPage(page + 1)
+        }
+    }
+    const reloadCmtHanlde = () => {
+        if(page > 1){
+            setComments([])
+            setPage(1)
+        }
+        else if(page === 1){
+            setComments([])
+            fetchComment()
+        }
+    }
+
+    const openCmtHandle = () => {
+        setIsActive(true)
+    }
+
+    const commentRef = useRef()
+    const commentHandle = async () => {
+        if(commentRef.current.value !== ''){
+            const newCmt = {
+                userId: user._id,
+                postId: post._id,
+                text: commentRef.current.value
+            }
+            setComments([...comments, newCmt])
+
+            try{
+                await axios.post(SV + '/comments/', newCmt)
+            }
+            catch(err){
+
+            }
+        }
+        else{
+           
         }
     }
 
@@ -245,7 +279,7 @@ export default function Post({ post }) {
                         <ThumbUpAlt/>
                         <span className="post-bottom-like-comment-text">Like</span>
                     </div>
-                    <div className="post-bottom-like-comment">
+                    <div className="post-bottom-like-comment" onClick={openCmtHandle}>
                         <Comment/>
                         <span className="post-bottom-like-comment-text">Comment</span>
                     </div>
@@ -256,7 +290,20 @@ export default function Post({ post }) {
                 {comments.map((comment) => (
                     <Comments key={comment._id} comment={comment} />
                 ))}
-                <p className='post-load-comments' onClick={loadCmtHanlde}>load cmt</p>
+                <div className="post-load-comments">
+                    <p className='post-load-comments-text' onClick={reloadCmtHanlde}>reload cmt</p>
+                    <p className='post-load-comments-text' onClick={loadCmtHanlde}>load cmt</p>
+                </div>
+                
+
+                <div className={'post-send-comment ' + (isActive ? 'active' : '')}>
+                    <img src={PF+user.avatar} alt="" className="comment-avatar" />
+                    <div className="comment-input">
+                        <input type="text" placeholder='Input message' ref={commentRef} />
+                    </div>
+                    
+                    <button onClick={commentHandle}>Send</button>
+                </div>
             </div>
 
 

@@ -102,7 +102,36 @@ a{
 
 .post-load-comments{
     padding: 10px 20px;
-    cursor: pointer;
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
+}
+.post-load-comments-text{
+    cursor: pointer;
+}
+
+.post-send-comment{
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(203, 152, 250);
+    padding: 20px;
+    border-radius: 10px;
+}
+.post-send-comment.active{
+    display: flex;
+}
+.comment-input{
+    background-color: aqua;
+    padding: 5px 10px;
+    margin: 0px 20px;
+    border-radius: 30px;
+    width: 60%;
+}
+.comment-input input{
+    border: none;
+    background-color: aqua;
+    width: 100%;
+}
+.comment-input input:focus{
+    outline: none;
 }
