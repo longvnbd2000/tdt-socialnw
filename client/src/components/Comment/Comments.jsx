@@ -1,6 +1,6 @@
 import './Comments.css'
 import { MoreHoriz, Settings } from '@mui/icons-material'
-import { IconButton, MenuItem, Menu, ListItemIcon, Divider } from '@mui/material'
+import { IconButton, MenuItem, Menu, ListItemIcon, Divider, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Button } from '@mui/material'
 import { AuthContext } from '../../context/AuthContext';
 import { useState, useEffect, useContext } from "react";
 import axios from 'axios';
@@ -21,7 +21,17 @@ export default function Comments({ comment }) {
       setAnchorEl(null);
     };
 
+    const [openDelConfirm, setOpenDelConfirm] = useState(false);
+    const handleClickOpenDelConfirm = () => {
+        setOpenDelConfirm(true);
+    };
+    
+    const handleCloseDelConfirm = () => {
+        setOpenDelConfirm(false);
+    };
+
     const [userComment, setUserComment] = useState({})
+    const [isDeleted, setIsDeleted] = useState(false)
 
     useEffect(() => {
         let isActive = true
@@ -35,12 +45,26 @@ export default function Comments({ comment }) {
         return () => isActive = false
     }, [comment.userId])
 
+
+    const deleteHandle = async () => {
+        try{
+            await axios.post(SV + '/comments/' + comment._id, {userId: user._id})
+            setIsDeleted(true)
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+
     return (
         <>
             <div className="comment-container">
-                <div className="comment">
+            {!isDeleted 
+            ? 
+            <div className="comment">
+                    
                     <div className="comment-left">
-                        <img src={PF+userComment.avatar} alt="" className="comment-avatar" />
+                        {userComment.avatar ? <img src={PF+userComment.avatar} alt="" className="comment-avatar" /> : <CircularProgress />}
                     </div>
                     <div className="comment-center">
                         <div className="comment-name">
@@ -61,7 +85,18 @@ export default function Comments({ comment }) {
                         <MoreHoriz />
                     </IconButton>
                     
-                    
+                    <Dialog open={openDelConfirm} onClose={handleCloseDelConfirm}>
+                        <DialogTitle>Delete Confirmation</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                Do you want to delete this post?
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={deleteHandle}>Confirm</Button>
+                            <Button onClick={handleCloseDelConfirm}>Cancel</Button>
+                        </DialogActions>
+                    </Dialog>
                     
                     <Menu
                         id="long-menu"
@@ -83,7 +118,7 @@ export default function Comments({ comment }) {
                     >
                         {user._id === comment.userId 
                         ?
-                        <MenuItem>
+                        <MenuItem onClick={handleClickOpenDelConfirm}>
                         <ListItemIcon>
                             <Settings fontSize="small" />
                         </ListItemIcon>
@@ -109,29 +144,23 @@ export default function Comments({ comment }) {
                         </ListItemIcon>
                         Report
                         </MenuItem>
-                        <Divider/>
-                        <MenuItem>
-                        <ListItemIcon>
-                            <Settings fontSize="small" />
-                        </ListItemIcon>
-                        Add another account
-                        </MenuItem>
-                        <MenuItem>
-                        <ListItemIcon>
-                            <Settings fontSize="small" />
-                        </ListItemIcon>
-                        Settings
-                        </MenuItem>
-                        <MenuItem>
-                        <ListItemIcon>
-                            <Settings fontSize="small" />
-                        </ListItemIcon>
-                        Logout
-                        </MenuItem>
 
                     </Menu>
                     </div>
                 </div>
+            : 
+            <div className='comment'>
+                <div className="comment-left">
+                    <div className='comment-temp'>t</div>
+                </div>
+                <div className='comment-deleted'>This comment has been deleted</div>
+                <div className='comment-right'>
+                    <div className='comment-temp'>t</div>
+                </div>
+            </div>
+
+            }
+                
             </div>
         </>
     )

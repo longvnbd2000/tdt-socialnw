@@ -44,3 +44,20 @@
     display: flex;
     justify-content: center;
 }
+
+.comment-deleted{
+    flex: 10;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: aqua;
+    text-align: center;
+}
+
+.comment-temp{
+    color: white;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
