@@ -3,7 +3,7 @@ import './Announcements.css'
 import { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 
-export default function Announcements() {
+export default function Announcements({announcements}) {
 
     const [open, setOpen] = useState(false);
     const handleClickOpen = () => () => {
@@ -33,16 +33,7 @@ export default function Announcements() {
                         <div className="announcements-list-item-faculty">Khoa Cong nghe thong tin</div>
                         <div className="announcements-list-item-date">10/8/2021</div>
                     </div>  
-                </li>
-                <li className="announcements-list-item" onClick={handleClickOpen()}>
-                    <div className="announcements-list-item-title">title title title title title title</div>
-                    <div className="announcements-list-item-text">dfdsfddsfdffafdsfdfsd</div>
-                    <div className="announcements-list-item-bottom">
-                        <div className="announcements-list-item-faculty">Khoa Cong nghe thong tin</div>
-                        <div className="announcements-list-item-date">10/8/2021</div>
-                    </div>  
-                </li>
-                
+                </li>           
             </ul>
 
             <Dialog

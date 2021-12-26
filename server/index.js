@@ -8,6 +8,7 @@ const userRoute = require('./routes/users')
 const authRoute = require('./routes/auth')
 const postRoute = require('./routes/posts')
 const commentRoute = require('./routes/comments')
+const announcementRoute = require('./routes/announcements')
 const expressSession = require('express-session')
 const passport = require('passport')
 const cookieParser = require('cookie-parser')
@@ -79,6 +80,7 @@ app.use('/api/users', userRoute)
 app.use('/api/auth', authRoute)
 app.use('/api/posts', postRoute)
 app.use('/api/comments', commentRoute)
+app.use('/api/announcements', announcementRoute)
 
 
 app.listen(PORT, () => {

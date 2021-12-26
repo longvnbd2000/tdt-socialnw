@@ -3,7 +3,7 @@ const Announcement = require('../models/announcement')
 
 //Create Announcement
 router.post("/", async (req, res) => {
-    const newAnnouncement = new Announcement(req.body)
+    const newAnnouncement = new Announcement(req.body.NewAnnouncement)
     try{
         const announcement = await newAnnouncement.save()
         res.status(200).json(announcement)
@@ -30,6 +30,17 @@ router.put("/:id", async (req, res) => {
     catch(err){
         res.status(500).json(err)
     }    
+})
+
+//Get Announcements
+router.get('/', async(req,res) => {
+    try{
+        const allAnnouncements = await Announcement.find().sort([['createdAt', -1]])
+        res.status(200).json(allAnnouncements);
+    }catch(err){
+        res.status(500).json(err)
+    }
+    
 })
 
 module.exports = router
