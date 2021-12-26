@@ -8,7 +8,9 @@ ReactDOM.render(
   <React.StrictMode>
     <PostContextProvider>
       <AuthContextProvider>
-        <App /> 
+        
+          <App /> 
+
       </AuthContextProvider>
     </PostContextProvider>
   </React.StrictMode>,

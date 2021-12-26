@@ -113,7 +113,7 @@ a{
     display: none;
     align-items: center;
     justify-content: center;
-    background-color: rgb(203, 152, 250);
+    background-color: rgb(233, 210, 255);
     padding: 20px;
     border-radius: 10px;
 }
@@ -121,16 +121,31 @@ a{
     display: flex;
 }
 .comment-input{
-    background-color: aqua;
-    padding: 5px 10px;
+    background-color: rgb(205, 255, 255);
+    padding: 6px 10px;
     margin: 0px 20px;
     border-radius: 30px;
     width: 60%;
 }
 .comment-input input{
     border: none;
-    background-color: aqua;
+    background-color: rgb(205, 255, 255);
     width: 100%;
+}
+.comment-input-btn{
+    border: none;
+    color: rgb(20, 0, 66);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    transform: rotate(-180deg);
+    transition: transform 0.5s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.comment-input-btn:hover{
+    transform: rotate(-90deg);
 }
 .comment-input input:focus{
     outline: none;

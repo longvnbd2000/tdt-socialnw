@@ -25,6 +25,10 @@ const AnnouncementSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
+    category: {
+        type: String,
+        
+    }
     
 },
 {timestamps: true})

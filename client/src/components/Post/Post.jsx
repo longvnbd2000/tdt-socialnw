@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { MoreVert, ThumbUpAlt, Comment, Settings} from '@mui/icons-material'
-import { IconButton, MenuItem, Menu, ListItemIcon, Divider, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Slide, Button} from '@mui/material'
+import { MoreVert, ThumbUpAlt, Comment, Settings, Send} from '@mui/icons-material'
+import { IconButton, MenuItem, Menu, ListItemIcon, Divider, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Button} from '@mui/material'
 import './Post.css'
 import { useState, useEffect, useContext, useRef } from "react";
 import axios from 'axios'
@@ -74,6 +74,13 @@ export default function Post({ post }) {
 
     const deleteHandle = async () => {
         try{
+            const cmts = await axios.get(SV + '/comments/' + post._id)
+            console.log(cmts.data)
+            cmts.data.map(async (cmt) => {
+                const user = await axios.get(SV + '/users?userId=' + cmt.userId)
+                
+                await axios.post(SV + '/comments/' + cmt._id, {userId: user.data._id})
+            })
             await axios.post(SV + '/posts/' + post._id, {userId: user._id})
             dispatch({type: "POST_SUCCESS", payload: posts.filter(p => p._id !== post._id)})
         }
@@ -90,7 +97,8 @@ export default function Post({ post }) {
         }
         try{
             const res = await axios.get(SV + '/comments/pid/' + post._id + '/page/' + page)
-            const ps = [...comments, ...res.data]
+            res.data.sort((a, b) => a.createdAt - b.createdAt ? 1 : -1)
+            const ps = [ ...res.data, ...comments]
             const payload = ps.filter((object,index) => index === ps.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)))
             setComments(payload)
         }
@@ -120,20 +128,22 @@ export default function Post({ post }) {
 
     const openCmtHandle = () => {
         setIsActive(true)
+        document.getElementById(post._id).focus()
     }
 
-    const commentRef = useRef()
-    const commentHandle = async () => {
+    const commentRef = useRef('')
+    const commentHandle = async (e) => {
+        e.preventDefault()
         if(commentRef.current.value !== ''){
             const newCmt = {
                 userId: user._id,
                 postId: post._id,
                 text: commentRef.current.value
             }
-            setComments([...comments, newCmt])
 
             try{
-                await axios.post(SV + '/comments/', newCmt)
+                const res = await axios.post(SV + '/comments/', newCmt)
+                setComments([...comments, res.data])
             }
             catch(err){
 
@@ -287,23 +297,23 @@ export default function Post({ post }) {
                 <hr />
             </div>
             <div className="post-comments">
-                {comments.map((comment) => (
-                    <Comments key={comment._id} comment={comment} />
-                ))}
                 <div className="post-load-comments">
                     <p className='post-load-comments-text' onClick={reloadCmtHanlde}>reload cmt</p>
                     <p className='post-load-comments-text' onClick={loadCmtHanlde}>load cmt</p>
                 </div>
+                {comments.map((comment) => (
+                    <Comments key={comment._id} comment={comment} />
+                ))}
                 
 
-                <div className={'post-send-comment ' + (isActive ? 'active' : '')}>
+                <form className={'post-send-comment ' + (isActive ? 'active' : '')} onSubmit={commentHandle}>
                     <img src={PF+user.avatar} alt="" className="comment-avatar" />
                     <div className="comment-input">
-                        <input type="text" placeholder='Input message' ref={commentRef} />
+                        <input type="text" placeholder='Input message' id={post._id} ref={commentRef} />
                     </div>
                     
-                    <button onClick={commentHandle}>Send</button>
-                </div>
+                    <button type='submit' className='comment-input-btn'><Send /></button>
+                </form>
             </div>
 
 

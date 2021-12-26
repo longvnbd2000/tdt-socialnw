@@ -8,6 +8,81 @@ export default function Sidebar() {
 
     const { user } = useContext(AuthContext)
 
+    const category = [
+        {
+            name: "Phòng Công tác học sinh sinh viên",
+            avatar: PF+"avatar/noAvatar.jpg" 
+        },
+        {
+            name: "Phòng tài chính",
+            avatar: PF+"avatar/noAvatar.jpg" 
+        },
+        {
+            name: "TDT Creative Language Center",
+            avatar: PF+"avatar/noAvatar.jpg" 
+        },
+        {
+            name: "Trung tâm tin học",
+            avatar: PF+"avatar/noAvatar.jpg" 
+        },
+        {
+            name: "Trung tâm đào tạo phát triển xã hội",
+            avatar: PF+"avatar/noAvatar.jpg" 
+        },
+        {
+            name: "Trung tâm phát triển Khoa học quản lý và Ứng dụng công nghệ",
+            avatar: PF+"avatar/noAvatar.jpg" 
+        },
+        {
+            name: "Trung tâm hợp tác doanh nghiệp và cựu sinh viên",
+            avatar: PF+"avatar/noAvatar.jpg" 
+        },
+        {
+            name: "Khoa Luật",
+            avatar: PF+"avatar/noAvatar.jpg" 
+        },
+        {
+            name: "Trung tâm ngoại ngữ - tin học - bồi dưỡng văn hóa",
+            avatar: PF+"avatar/noAvatar.jpg" 
+        },
+        {
+            name: "Viện chính sách kinh tế và kinh doanh",
+            avatar: PF+"avatar/noAvatar.jpg" 
+        },
+        {
+            name: "Khoa Mỹ thuật công nghiệp",
+            avatar: PF+"avatar/noAvatar.jpg" 
+        },
+        {
+            name: "Khoa Điện - Điện tử",
+            avatar: PF+"avatar/noAvatar.jpg" 
+        },
+        {
+            name: "Khoa Công nghệ thông tin",
+            avatar: PF+"avatar/noAvatar.jpg" 
+        },
+        {
+            name: "Khoa Quản trị kinh doanh",
+            avatar: PF+"avatar/noAvatar.jpg" 
+        },
+        {
+            name: "Khoa Môi trường và bảo hộ lao động",
+            avatar: PF+"avatar/noAvatar.jpg" 
+        },
+        {
+            name: "Khoa Lao động công đoàn",
+            avatar: PF+"avatar/noAvatar.jpg" 
+        },
+        {
+            name: "Khoa Tài chính ngân hàng",
+            avatar: PF+"avatar/noAvatar.jpg" 
+        },
+        {
+            name: "Khoa giáo dục quốc tế",
+            avatar: PF+"avatar/noAvatar.jpg" 
+        }
+    ]
+
     return (
         <div className="sidebar">
             <div className="sidebar-items">
@@ -44,38 +119,12 @@ export default function Sidebar() {
                 <hr className="sidebar-line" />
                 <div className="rightbar-title">Faculty</div>
                 <ul className="sidebar-group">
-                    <li className="sidebar-group-item">
-                        <img src="assets/avatar/ok.jpg" alt="" className="sidebar-group-item-avatar" />
-                        <span className="sidebar-group-item-user">Khoa Công nghệ thông tin</span>
-                    </li>
-                    <li className="sidebar-group-item">
-                        <img src="assets/avatar/ok.jpg" alt="" className="sidebar-group-item-avatar" />
-                        <span className="sidebar-group-item-user">Khoa Khoa học xã hội và nhân văn</span>
-                    </li>
-                    <li className="sidebar-group-item">
-                        <img src="assets/avatar/ok.jpg" alt="" className="sidebar-group-item-avatar" />
-                        <span className="sidebar-group-item-user">Khoa Công nghệ thông tin</span>
-                    </li>
-                    <li className="sidebar-group-item">
-                        <img src="assets/avatar/ok.jpg" alt="" className="sidebar-group-item-avatar" />
-                        <span className="sidebar-group-item-user">Khoa Công nghệ thông tin</span>
-                    </li>
-                    <li className="sidebar-group-item">
-                        <img src="assets/avatar/ok.jpg" alt="" className="sidebar-group-item-avatar" />
-                        <span className="sidebar-group-item-user">Khoa Công nghệ thông tin</span>
-                    </li>
-                    <li className="sidebar-group-item">
-                        <img src="assets/avatar/ok.jpg" alt="" className="sidebar-group-item-avatar" />
-                        <span className="sidebar-group-item-user">Khoa Công nghệ thông tin</span>
-                    </li>
-                    <li className="sidebar-group-item">
-                        <img src="assets/avatar/ok.jpg" alt="" className="sidebar-group-item-avatar" />
-                        <span className="sidebar-group-item-user">Khoa Công nghệ thông tin</span>
-                    </li>
-                    <li className="sidebar-group-item">
-                        <img src="assets/avatar/ok.jpg" alt="" className="sidebar-group-item-avatar" />
-                        <span className="sidebar-group-item-user">Khoa Công nghệ thông tin</span>
-                    </li>
+                    {category.map(c => (
+                        <li className="sidebar-group-item">
+                            <img src={c.avatar} alt="" className="sidebar-group-item-avatar" />
+                            <span className="sidebar-group-item-user">{c.name}</span>
+                        </li>
+                    ))}
                 </ul>
             </div>
         </div>
