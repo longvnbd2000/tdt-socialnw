@@ -75,6 +75,26 @@ app.post('/api/upload/avatar', avtUpload.single("file"), (req, res) => {
     }
 })
 
+const fileStorage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        callback(null, "public/images/file")
+    },
+    filename: (req, file, callback) => {
+        callback(null, req.body.name)
+    }
+})
+const fileUpload = multer({
+    storage: fileStorage
+})
+app.post('/api/upload/announcement', fileUpload.single("file"), (req, res) => {
+    try{
+        res.json("file uploaded")
+    }
+    catch(err){
+        console.log(err)
+    }
+})
+
 
 app.use('/api/users', userRoute)
 app.use('/api/auth', authRoute)

@@ -8,15 +8,20 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios'
 import {AuthContext} from '../../context/AuthContext';
+import {Alert, IconButton, Collapse} from '@mui/material';
+import {CloseIcon} from '@mui/icons-material/Close'
 
 export default function CreateAnnouncement() {
     const SV = process.env.REACT_APP_SV_HOST;
     const {user} = useContext(AuthContext);
 
     const {acceptedFiles, getRootProps, getInputProps} = useDropzone();
-    
-    const [text, setText] = useState('');
 
+    const [text, setText] = useState('');
+    const [multipleFiles, setMultipleFiles] = useState('');
+    const [success, setSuccess] = useState(false);
+    const [fail, setFail] = useState(false);
+    
     const titleRef = useRef()
     const detailRef = useRef()
     const typeRef = useRef()
@@ -32,6 +37,7 @@ export default function CreateAnnouncement() {
             {file.path} - {file.size} bytes
         </li>
     ));
+
     console.log(acceptedFiles);
     
     const richText = (event, editor) => {
@@ -39,7 +45,7 @@ export default function CreateAnnouncement() {
         setText(data)
     }
     
-    const handleSubmit = async (e, res, req) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const title = titleRef.current.value;
@@ -50,21 +56,25 @@ export default function CreateAnnouncement() {
          // console.log({title, detail, type, faculty});
         if(title === "" || title === null){
             setErrorMessage("Enter the title");
+            setFail(true)
             return false
         }
 
         if(detail === "" || detail === null){
             setErrorMessage("Enter your announcement's detail");
+            setFail(true)
             return false
         }
 
         if(type === "" || type === null){
             setErrorMessage("Enter your announcement's type");
+            setFail(true)
             return false
         }
 
         if(faculty === "" || faculty === null){
             setErrorMessage("Enter your announcement's faculty");
+            setFail(true)
             return false
         }
         
@@ -77,12 +87,46 @@ export default function CreateAnnouncement() {
                     type: type,
                     faculty: faculty,
                 }
-    
                 // await axios.post(SV + "/announcements/", {NewAnnouncement})
-                console.log(e);
+                if(acceptedFiles){
+                    let filesReq = []
+                    acceptedFiles.map(file => {
+                        const data = new FormData()
+                        const fileName = Date.now() + "_" + file.name
+                        data.append("name", fileName)
+                        data.append("file", file)
+                        filesReq.push("announcement/" + fileName)
+                        try{
+                            axios.post(SV + "/upload/announcement", data)
+                        }
+                        catch(err){
+                            console.log(err)
+                        }
+                    })
+                    NewAnnouncement.file = filesReq
+                }
+                fetch(SV + "/announcements/", {
+                    method: 'POST',
+                    body: JSON.stringify(NewAnnouncement),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(res => { 
+                    if(res.status == 200){
+                        document.getElementById('announce-title').value = ''
+                        document.getElementById('announce-type').value = ''
+                        document.getElementById('announce-faculty').value = ''
+                        setText('')
+                        setSuccess(true)
+                    }else{
+                        setFail(true)
+                    }
+                }
+                )
+                .then(data => console.log(data)); 
             }
             catch{
-
             }
             
         }
@@ -188,12 +232,28 @@ export default function CreateAnnouncement() {
                             </td>
                         </tr>
                     </table>
+                    {success ? (
+                        <div><Alert severity="success">Đăng thành công</Alert></div>
+                    ) : (
+                        <div style={{display: 'none'}}><h1 style={{display: 'none'}}>Not Good</h1></div>
+                    )
+                    }
+                     {fail ? 
+                        (
+                            <div><Alert severity="error">{errorMessage}</Alert></div>
+
+                        ) : (
+                            <div><h1 style={{display: 'none'}}>Not Good</h1></div>
+                        )
+                    }
+
+                    
                     <div className="btn-group">
                         <button className="announce-btn-submit" type="submit" >Đăng</button>
                         <button className="announce-btn-reset" type="reset" >Nhập lại</button>
                     </div>
-                        
                 </form>
+               
             </div>
             <Rightbar/>
         </div>

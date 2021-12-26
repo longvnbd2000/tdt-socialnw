@@ -22,13 +22,9 @@ const AnnouncementSchema = new mongoose.Schema({
         require: true,
     },
     file:{
-        type: String,
+        type: Array,
         default: ""
     },
-    category: {
-        type: String,
-        
-    }
     
 },
 {timestamps: true})

@@ -3,10 +3,11 @@ const Announcement = require('../models/announcement')
 
 //Create Announcement
 router.post("/", async (req, res) => {
-    const newAnnouncement = new Announcement(req.body.NewAnnouncement)
+    const newAnnouncement = new Announcement(req.body)
     try{
         const announcement = await newAnnouncement.save()
         res.status(200).json(announcement)
+        
     }
     catch(err){
         res.status(500).json(err)
