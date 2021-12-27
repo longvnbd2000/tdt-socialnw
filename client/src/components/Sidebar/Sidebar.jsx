@@ -117,7 +117,7 @@ export default function Sidebar() {
                     </li>
                 </ul>
                 <hr className="sidebar-line" />
-                <div className="rightbar-title">Faculty</div>
+                <div className="rightbar-title">Lối tắt</div>
                 <ul className="sidebar-group">
                     {category.map(c => (
                         <li className="sidebar-group-item">

@@ -37,8 +37,6 @@ export default function CreateAnnouncement() {
             {file.path} - {file.size} bytes
         </li>
     ));
-
-    console.log(acceptedFiles);
     
     const richText = (event, editor) => {
         const data = editor.getData();
@@ -191,23 +189,7 @@ export default function CreateAnnouncement() {
                             <td>
                                 <select name="announce-faculty" id="announce-faculty" ref={facultyRef}>
                                     <option value='' selected="selected" disabled>Khoa</option>
-                                    <option value='CNTT'>CNTT</option>
-                                    <option value='duoc'>Dược</option>
-                                    <option value='dientu'>Điện - điện tử</option>
-                                    <option value='giaoducquocte'>Giáo dục quốc tế</option>
-                                    <option value='ketoan'>Kế toán</option>
-                                    <option value='khthethao'>Khoa học thể thao</option>
-                                    <option value='khungdung'>Khoa học ứng dụng</option>
-                                    <option value='khxhvnv'>Khoa học xã hội và nhân văn</option>
-                                    <option value='kythuatcongtrinh'>Kỹ thuật công trình</option>
-                                    <option value='laodongvacongdoan'>Lao động và công đoàn</option>
-                                    <option value='luat'>Luật</option>
-                                    <option value='moitruong'>Môi trường và bảo hộ lao động</option>
-                                    <option value='mythuat'>Mỹ thuật công nghiệp</option>
-                                    <option value='ngoaingu'>Ngoại ngữ</option>
-                                    <option value='qtkd'>Quản trị kinh doanh</option>
-                                    <option value='tcnh'>Tài chính - ngân hàng</option>
-                                    <option value='toanthongke'>Toán - thống kê</option>
+                                    {user.permissions.map(p => <option value={p}>{p}</option>)}
                                 </select>
                             </td>
                         </tr>

@@ -33,7 +33,7 @@ router.put("/:id", async (req, res) => {
     }    
 })
 
-//Get Announcements
+//Get all Announcements
 router.get('/', async(req,res) => {
     try{
         const allAnnouncements = await Announcement.find().sort([['createdAt', -1]])

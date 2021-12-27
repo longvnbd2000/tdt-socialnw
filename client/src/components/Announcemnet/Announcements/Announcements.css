@@ -28,6 +28,10 @@
 
 .announcements-list-item-text{
     padding: 20px;
+    width: 100%;
+   
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .announcements-list-item-bottom{
     display: flex;
