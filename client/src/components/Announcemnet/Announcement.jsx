@@ -1,6 +1,6 @@
 import React from 'react'
 import Announcements from './Announcements/Announcements'
-import Pagination from '../Pagination/Pagination'
+import {Pagination} from '@mui/material'
 import './Announcement.css'
 import axios from 'axios'
 import { useEffect } from 'react'
@@ -13,8 +13,7 @@ export default function Announcement() {
     const [display, setDisplay] = useState([])
     const [page, setPage] = useState(1)
     const [totalPage, setTotalPage] = useState(0)
-    const [lastPos, setLastPos] = useState(5)
-    const limit = 10
+    const limit = 5
 
     const fetchAnnouncement = async () => {
         try{
@@ -26,32 +25,22 @@ export default function Announcement() {
         }
     }
 
-    const displayCalc = () => {
-        setLastPos(page * limit)
-        setDisplay(announcements.slice((page - 1) * limit, lastPos))
-    }
-
     useEffect(() => {
         fetchAnnouncement()
+        
         
     }, [])
 
     useEffect(() => {
         setTotalPage(Math.ceil(announcements.length/limit))
-        
-        displayCalc()
-        console.log(page)
-    }, [page])
+        const dp = announcements.slice((page - 1) * limit, page * limit)
+        setDisplay([...dp])
 
-    const nextPage =() =>{
-        if(page === totalPage) return
-        setPage(page+1)
+    }, [page, announcements])
 
-    }
-    const prevPage =() =>{
-        if(page === 1) return
-        setPage(page-1)
-        
+
+    const pageHandle = (event, value) => {
+        setPage(value)
     }
 
     return (
@@ -62,9 +51,7 @@ export default function Announcement() {
             <div className="announcement-bottom">
                 {display.map(a => <Announcements key={a._id} announcement={a} />)}
                 
-                <Pagination />
-                <button onClick={nextPage}>next</button>
-                <button onClick={prevPage}>prev</button>
+                <Pagination count={totalPage} onChange={pageHandle} />
             </div>
         </div>
     )

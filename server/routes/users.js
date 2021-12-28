@@ -62,6 +62,20 @@ router.delete('/:id', async(req, res) => {
     }
 })
 
-
+//get all users
+router.get('/all', async(req, res) => {
+    try{
+        const users = await User.find()
+        let result = []
+        users.map(u => {
+            const {_id, username, avatar} = u._doc
+            result.push({_id, username, avatar})
+        })
+        res.status(200).json(result)
+    }
+    catch (err){
+        res.status(500).json(err)
+    }
+})
 
 module.exports = router

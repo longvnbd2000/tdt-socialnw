@@ -30,6 +30,7 @@ export default function Navbar() {
 
     const handleClickE3 = (event) => {
         setAnchorE3(event.currentTarget);
+        document.getElementById('announce-badge').classList.add('hide')
     };
     const handleCloseE3 = () => {
         setAnchorE3(null);
@@ -188,7 +189,7 @@ export default function Navbar() {
 
                     <div className="navbar-icons-item" onClick={handleClickE3}>
                         <Notifications className="navbar-icons-item-icon"/>
-                        <span className="navbar-icons-item-badge">1</span>
+                        <span id='announce-badge' className="navbar-icons-item-badge hide">1</span>
                     </div>
 
                     <Menu
@@ -226,7 +227,7 @@ export default function Navbar() {
                                     variant="body2"
                                     color="text.primary"
                                 >
-                                    Ali Connors
+                                    Ali 
                                 </Typography>
                                 {" — I'll be in your neighborhood doing errands this…"}
                                 </React.Fragment>
