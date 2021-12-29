@@ -1,16 +1,20 @@
 import * as React from 'react'
+import { useContext, useEffect } from 'react'
 import {Search, Notifications, Person, Home, NotificationImportant, PersonAdd, Settings, Logout, AddAlert} from '@mui/icons-material'
 import {Menu, MenuItem, Avatar, Divider, ListItemIcon, List, ListItemAvatar, ListItemText, Typography, ListItemButton} from '@mui/material'
 import './Navbar.css'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext'
+import { SocketContext } from '../../context/SocketContext'
+import { useState } from 'react'
 
 export default function Navbar() {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
+    const { socket } = useContext(SocketContext)
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [anchorE2, setAnchorE2] = React.useState(null);
-    const [anchorE3, setAnchorE3] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorE2, setAnchorE2] = useState(null);
+    const [anchorE3, setAnchorE3] = useState(null);
     const openE1 = Boolean(anchorEl);
     const openE2 = Boolean(anchorE2);
     const openE3 = Boolean(anchorE3);
@@ -30,18 +34,34 @@ export default function Navbar() {
 
     const handleClickE3 = (event) => {
         setAnchorE3(event.currentTarget);
-        document.getElementById('announce-badge').classList.add('hide')
+        setRead(notificationLength)
+        setNotificationLength(0)
     };
     const handleCloseE3 = () => {
         setAnchorE3(null);
     };
 
-    const { user } = React.useContext(AuthContext)
+    const { user } = useContext(AuthContext)
 
     const logoutHandler = () => {
         localStorage.clear()
         window.location.reload()
     }
+
+    const [notification, setNotification] = useState([])
+    const [notificationLength, setNotificationLength] = useState(0)
+    const [read, setRead] = useState(0)
+
+    useEffect(() => {
+        socket.on('getAnnouncementNotification', (data) => {
+            setNotification(prev => [data, ...prev])
+        })
+    }, [socket])
+
+    useEffect(() => {
+        setNotificationLength(notification.length - read)
+    }, [notification])
+
 
     return (
         <div className="navbarContainer">
@@ -189,7 +209,7 @@ export default function Navbar() {
 
                     <div className="navbar-icons-item" onClick={handleClickE3}>
                         <Notifications className="navbar-icons-item-icon"/>
-                        <span id='announce-badge' className="navbar-icons-item-badge hide">1</span>
+                        {notificationLength === 0 ? null : <span className="navbar-icons-item-badge">{notificationLength}</span>}
                     </div>
 
                     <Menu
@@ -213,93 +233,35 @@ export default function Navbar() {
                         anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
                     >
                         <List sx={{  bgcolor: 'background.paper' }}>
-                        <ListItemButton alignItems="flex-start">
-                            <ListItemAvatar>
-                            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                            </ListItemAvatar>
-                            <ListItemText
-                            primary="Brunch this weekend?"
-                            secondary={
-                                <React.Fragment>
-                                <Typography
-                                    sx={{ display: 'inline' }}
-                                    component="span"
-                                    variant="body2"
-                                    color="text.primary"
-                                >
-                                    Ali 
-                                </Typography>
-                                {" — I'll be in your neighborhood doing errands this…"}
-                                </React.Fragment>
-                            }
-                            />
-                        </ListItemButton>
-                        <Divider variant="inset" component="li" />
-                        <ListItemButton alignItems="flex-start">
-                            <ListItemAvatar>
-                            <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-                            </ListItemAvatar>
-                            <ListItemText
-                            primary="Summer BBQ"
-                            secondary={
-                                <React.Fragment>
-                                <Typography
-                                    sx={{ display: 'inline' }}
-                                    component="span"
-                                    variant="body2"
-                                    color="text.primary"
-                                >
-                                    to Scott, Alex, Jennifer
-                                </Typography>
-                                {" — Wish I could come, but I'm out of town this…"}
-                                </React.Fragment>
-                            }
-                            />
-                        </ListItemButton>
-                        <Divider variant="inset" component="li" />
-                        <ListItemButton alignItems="flex-start">
-                            <ListItemAvatar>
-                            <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-                            </ListItemAvatar>
-                            <ListItemText
-                            primary="Oui Oui"
-                            secondary={
-                                <React.Fragment>
-                                <Typography
-                                    sx={{ display: 'inline' }}
-                                    component="span"
-                                    variant="body2"
-                                    color="text.primary"
-                                >
-                                    Sandra Adams
-                                </Typography>
-                                {' — Do you have Paris recommendations? Have you ever…'}
-                                </React.Fragment>
-                            }
-                            />
-                        </ListItemButton>
-                        <Divider variant="inset" component="li" />
-                        <ListItemButton alignItems="flex-start">
-                            <ListItemAvatar>
-                            <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-                            </ListItemAvatar>
-                            <ListItemText
-                            primary="Oui Oui"
-                            secondary={
-                                <React.Fragment>
-                                <Typography
-                                    sx={{ display: 'inline' }}
-                                    component="span"
-                                    variant="body2"
-                                    color="text.primary"
-                                >
-                                    Sandra Adams
-                                </Typography>
-                                {' — Do you have Paris recommendations? Have you ever…'}
-                                </React.Fragment>
-                            }
-                            />
-                        </ListItemButton>
+                        {notification.map(n => (
+                            <>
+                            <ListItemButton alignItems="flex-start">
+                                <ListItemAvatar>
+                                <Avatar alt="Remy Sharp" src={PF + n.avatar} />
+                                </ListItemAvatar>
+                                <ListItemText
+                                primary={n.sendName}
+                                secondary={
+                                    <React.Fragment>
+                                    <Typography
+                                        sx={{ display: 'inline' }}
+                                        component="span"
+                                        variant="body2"
+                                        color="text.primary"
+                                    >
+                                       {n.category + ' — Vừa đăng một thông báo mới'}
+                                    </Typography>
+                                   
+                                    </React.Fragment>
+                                }
+                                />
+                            </ListItemButton>
+                            <Divider variant="inset" component="li" />                           
+                            </>
+                            
+                        ))}
+                        
+                        
                         </List>
                     </Menu>
                 </div>

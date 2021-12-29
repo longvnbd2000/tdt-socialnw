@@ -132,6 +132,10 @@ io.on('connection', socket => {
         io.emit('getUsers', users)
     })
 
+    socket.on('createNewAnnouncement', ({sendName, avatar, data}) => {
+        io.emit('getAnnouncementNotification', {sendName, avatar, category: data.faculty})
+    })
+
     socket.on('disconnect', () => {
         console.log('disconnected')
         removeUser(socket.id)

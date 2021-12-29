@@ -10,10 +10,12 @@ import axios from 'axios'
 import {AuthContext} from '../../context/AuthContext';
 import {Alert, IconButton, Collapse} from '@mui/material';
 import {CloseIcon} from '@mui/icons-material/Close'
+import { SocketContext } from '../../context/SocketContext'
 
 export default function CreateAnnouncement() {
     const SV = process.env.REACT_APP_SV_HOST;
     const {user} = useContext(AuthContext);
+    const {socket} = useContext(SocketContext)
 
     const {acceptedFiles, getRootProps, getInputProps} = useDropzone();
 
@@ -77,7 +79,7 @@ export default function CreateAnnouncement() {
         }
         
         else{
-                try{
+            try{
                 const NewAnnouncement = {
                     userId: user._id,
                     title: title,
@@ -85,7 +87,7 @@ export default function CreateAnnouncement() {
                     type: type,
                     faculty: faculty,
                 }
-                // await axios.post(SV + "/announcements/", {NewAnnouncement})
+                
                 if(acceptedFiles){
                     let filesReq = []
                     acceptedFiles.map(file => {
@@ -103,7 +105,22 @@ export default function CreateAnnouncement() {
                     })
                     NewAnnouncement.file = filesReq
                 }
-                fetch(SV + "/announcements/", {
+
+                const res = await axios.post(SV + "/announcements/", NewAnnouncement)
+                if(res.status === 200){
+                    document.getElementById('announce-title').value = ''
+                    document.getElementById('announce-type').value = ''
+                    document.getElementById('announce-faculty').value = ''
+                    setText('')
+                    setSuccess(true)
+                    
+                    socket.emit("createNewAnnouncement", {sendName: user.username, avatar: user.avatar, data: res.data})
+
+                }else{
+                    setFail(true)
+                }
+
+                /*fetch(SV + "/announcements/", {
                     method: 'POST',
                     body: JSON.stringify(NewAnnouncement),
                     headers: {
@@ -111,18 +128,22 @@ export default function CreateAnnouncement() {
                     },
                 })
                 .then(res => { 
-                    if(res.status == 200){
+                    res.json()
+                    if(res.status === 200){
                         document.getElementById('announce-title').value = ''
                         document.getElementById('announce-type').value = ''
                         document.getElementById('announce-faculty').value = ''
                         setText('')
                         setSuccess(true)
+                        
+                        socket.emit("createNewAnnouncement", {sendName: user.username, data: res.data})
+
                     }else{
                         setFail(true)
                     }
                 }
                 )
-                .then(data => console.log(data)); 
+                .then(data => console.log(data)); */
             }
             catch{
             }
@@ -146,7 +167,7 @@ export default function CreateAnnouncement() {
                             </td>
                         </tr>
                         <tr>
-                            <td colspan='2'>
+                            <td colSpan='2'>
                                 <input ref={titleRef} type="text" name="announce-title" id="announce-title" className='announce-input-text'/>
                             </td>
                         </tr>
@@ -157,7 +178,7 @@ export default function CreateAnnouncement() {
                             </td>
                         </tr>
                         <tr>
-                            <td colspan='2'>
+                            <td colSpan='2'>
                                 {/* <textarea name="announce-detail" id="announce-detail" cols="110" rows="10" className='announce-input-text'></textarea> */}
                                 <div className="rich">
                                     <CKEditor
@@ -200,7 +221,7 @@ export default function CreateAnnouncement() {
                             </td>
                         </tr>
                         <tr>
-                            <td colspan='2'>
+                            <td colSpan='2'>
                                 <div className="files-form">
                                     <div {...getRootProps({className: 'dropzone'})}>
                                         <input {...getInputProps()} />

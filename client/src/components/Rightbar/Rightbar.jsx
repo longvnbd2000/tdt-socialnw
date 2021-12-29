@@ -1,22 +1,17 @@
 import './Rightbar.css'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { AuthContext } from '../../context/AuthContext'
-import { io } from 'socket.io-client'
 import axios from 'axios'
+import { SocketContext } from '../../context/SocketContext'
 
 export default function Rightbar() {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
 
     const { user } = useContext(AuthContext)
-    const socket = useRef()
-    const ENDPOINT = 'ws://localhost:8080'
+    const { socket } = useContext(SocketContext)
     const [onlineUsers, setOnlineUsers] = useState([])
     const [allUsers, setAllUsers] = useState([])
     const [onlineUsersInfo, setOnlineUsersInfo] = useState([])
-
-    useEffect(() => {
-        socket.current = io(ENDPOINT)
-    }, [])
 
     useEffect(() => {
         const fetchUser = async () =>{
@@ -25,8 +20,8 @@ export default function Rightbar() {
         }
         fetchUser()
 
-        socket.current.emit('addUser', user._id)
-        socket.current.on('getUsers', users => {
+        socket.emit('addUser', user._id)
+        socket.on('getUsers', users => {
             setOnlineUsers(users.filter(u => u.userId !== user._id))
         })
     }, [user])
@@ -34,9 +29,6 @@ export default function Rightbar() {
     useEffect(() => {
         setOnlineUsersInfo(allUsers.filter(a => onlineUsers.some(o => o.userId === a._id)))
     }, [allUsers, onlineUsers])
-
-    console.log(allUsers)
-    console.log(onlineUsers)
     
 
     return (

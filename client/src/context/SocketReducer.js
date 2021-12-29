@@ -1,22 +1,22 @@
-export const CommentReducer = (state, action) => {
+export const SocketReducer = (state, action) => {
     switch(action.type){
-        case "COMMENT_START":
+        case "SOCKET_START":
             return{
-                comments: [],
+                socket: null,
                 isFetching: true,
                 error: false,
             }
         
-        case "COMMENT_SUCCESS":
+        case "SOCKET_SUCCESS":
             return{
-                comments: action.payload,
+                socket: action.payload,
                 isFetching: false,
                 error: false,
             }
             
-        case "COMMENT_FAILURE":
+        case "SOCKET_FAILURE":
             return{
-                comments: [],
+                socket: null,
                 isFetching: false,
                 error: action.payload,
             }    
