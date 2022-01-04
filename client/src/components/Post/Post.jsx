@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { MoreVert, ThumbUpAlt, Comment, Settings, Send} from '@mui/icons-material'
+import { MoreVert, ThumbUpAlt, Comment, Settings, Send, Replay} from '@mui/icons-material'
 import { IconButton, MenuItem, Menu, ListItemIcon, Divider, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Button} from '@mui/material'
 import './Post.css'
 import { useState, useEffect, useContext, useRef } from "react";
@@ -286,7 +286,7 @@ export default function Post({ post }) {
                 <hr />
                 <div className="post-bottom-item">
                     <div className="post-bottom-like-comment" onClick={likeClickHandle}>
-                        <ThumbUpAlt/>
+                        <ThumbUpAlt style={{ fill: 'rgb(58, 174, 252)' }}/>
                         <span className="post-bottom-like-comment-text">Like</span>
                     </div>
                     <div className="post-bottom-like-comment" onClick={openCmtHandle}>
@@ -298,8 +298,8 @@ export default function Post({ post }) {
             </div>
             <div className="post-comments">
                 <div className="post-load-comments">
-                    <p className='post-load-comments-text' onClick={reloadCmtHanlde}>reload cmt</p>
-                    <p className='post-load-comments-text' onClick={loadCmtHanlde}>load cmt</p>
+                    <p className='post-load-comments-text' onClick={reloadCmtHanlde}>Reload <Replay className='load-comments-icon' /></p>
+                    <p className='post-load-comments-text' onClick={loadCmtHanlde}><Replay className='load-comments-icon' /> Load</p>
                 </div>
                 {comments.map((comment) => (
                     <Comments key={comment._id} comment={comment} />

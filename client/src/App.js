@@ -6,17 +6,23 @@ import {BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-do
 import './App.css'
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./context/AuthContext";
-import { PostContext } from "./context/PostContext";
+import { SocketContext } from "./context/SocketContext";
 import axios from "axios";
 import Register from "./pages/Register/Register";
 import CreateAnnouncement from "./pages/CreateAnnouncement/CreateAnnouncement";
+<<<<<<< HEAD
 import MyAnnouncement from "./pages/MyAnnouncement/MyAnnouncement";
+=======
+import { io } from 'socket.io-client'
+>>>>>>> d1d63bda46ba4dc360ef4aaba3c190cfee642b6a
 
 function App() {
   const SV = process.env.REACT_APP_SV_HOST
+  const ENDPOINT = 'ws://localhost:8080'
   
   const userToken = localStorage.getItem('userToken')
   const {user, dispatch} = useContext(AuthContext)
+  const {socket, dispatch: socketDispatch} = useContext(SocketContext)
 
   const fetchUser = async () => {
     dispatch({type: "SIGNIN_START"})
@@ -33,7 +39,8 @@ function App() {
     if(userToken){
       fetchUser()
     }
-  
+
+    socketDispatch({type: "SOCKET_SUCCESS", payload: io(ENDPOINT)})
   }, [])
   return (
     <Router>

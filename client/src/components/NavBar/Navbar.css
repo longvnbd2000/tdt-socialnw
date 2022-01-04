@@ -156,3 +156,18 @@ a{
     transform: 'translateY(-50%) rotate(45deg)';
     z-index: 0;
 }
+
+@media only screen and (max-width: 1000px){
+    .navbar-link-text{
+        display: none;
+    }
+    .navbar-right{
+        flex: 6;
+    }
+    .navbar-center{
+        flex: 2;
+    }
+    .navbar-user-name{
+        display: none;
+    }
+}

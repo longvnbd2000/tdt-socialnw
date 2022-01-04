@@ -15,6 +15,8 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const multer = require('multer')
 const path = require('path')
+const http = require('http')
+const socketio = require('socket.io')
 
 const corsOptions = {
     origin: true, 
@@ -103,6 +105,40 @@ app.use('/api/comments', commentRoute)
 app.use('/api/announcements', announcementRoute)
 
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`App is running on port ${PORT}`)
+})
+
+const io = socketio(server, {
+    cors: {
+        origin: 'http://localhost:3000'
+    },
+})
+
+let users = []
+const addUser = (userId, socketId) => {
+    if(!users.some(u => u.userId === userId)) users.push({userId, socketId})
+}
+
+const removeUser = (socketId) => {
+    users = users.filter(u => u.socketId !== socketId)
+}
+
+io.on('connection', socket => {
+    console.log('new connection')
+
+    socket.on('addUser', userId => {
+        addUser(userId, socket.id)
+        io.emit('getUsers', users)
+    })
+
+    socket.on('createNewAnnouncement', ({sendName, avatar, data}) => {
+        io.emit('getAnnouncementNotification', {sendName, avatar, category: data.faculty})
+    })
+
+    socket.on('disconnect', () => {
+        console.log('disconnected')
+        removeUser(socket.id)
+        io.emit('getUsers', users)
+    })
 })

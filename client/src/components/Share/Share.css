@@ -23,13 +23,13 @@
     border-radius: 40px;
     margin-left: 20px;
     border: none;
-    background-color: rgb(205, 226, 233);
+    background-color: #f0f2f5;
 }
 .share-input-box{
     margin-left: 20px;
     align-items: center;
     border: none;
-    background-color: rgb(205, 226, 233);
+    background-color: #f0f2f5;
     width: 85%;
     font-size: 18px;
 }

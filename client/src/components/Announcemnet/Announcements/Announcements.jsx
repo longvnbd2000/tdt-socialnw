@@ -6,6 +6,7 @@ import parse from 'html-react-parser'
 
 export default function Announcements({announcement}) {
 
+    const [date, setDate] = useState(new Date(announcement.createdAt))
     const [open, setOpen] = useState(false);
     const handleClickOpen = () => () => {
         setOpen(true);
@@ -32,7 +33,7 @@ export default function Announcements({announcement}) {
                     <div className="announcements-list-item-text">{parse(announcement.text)}</div>
                     <div className="announcements-list-item-bottom">
                         <div className="announcements-list-item-faculty">{announcement.faculty}</div>
-                        <div className="announcements-list-item-date">{announcement.createAt}</div>
+                        <div className="announcements-list-item-date">{date.toLocaleDateString("en-US")}</div>
                     </div>  
                 </li>           
             </ul>
