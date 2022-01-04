@@ -1,12 +1,41 @@
-import {Home} from '@mui/icons-material'
+
 import './Sidebar.css'
 import { useContext } from 'react'
 import { AuthContext } from '../../context/AuthContext'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBell, faCalendarAlt, faClipboardCheck, faClipboardList, faClock, faHome } from '@fortawesome/free-solid-svg-icons'
 
 export default function Sidebar() {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
 
     const { user } = useContext(AuthContext)
+
+    const sidebarItem = [
+        {
+            name: "Trang chủ",
+            icon: <FontAwesomeIcon icon={faHome} className="font-awesome" />
+        },
+        {
+            name: "Thông báo",
+            icon: <FontAwesomeIcon icon={faBell} className="font-awesome" />
+        },
+        {
+            name: "Thời khóa biểu",
+            icon: <FontAwesomeIcon icon={faClock} className="font-awesome" />
+        },
+        {
+            name: "Lịch thi",
+            icon: <FontAwesomeIcon icon={faCalendarAlt} className="font-awesome" />
+        },
+        {
+            name: "Điểm thi",
+            icon: <FontAwesomeIcon icon={faClipboardList} className="font-awesome" />
+        },
+        {
+            name: "Điểm rèn luyện",
+            icon: <FontAwesomeIcon icon={faClipboardCheck} className="font-awesome" />
+        },
+    ]
 
     const category = [
         {
@@ -91,33 +120,15 @@ export default function Sidebar() {
                     <div className="sidebar-user-name">{user.username}</div>
                 </div>
                 <ul className="sidebar-list">
-                    <li className="sidebar-list-item">
-                        <Home className="sidebar-list-item-icon"/>
-                        <span className="sidebar-list-item-text">item 1</span>
+                    {sidebarItem.map(s => (
+                        <li className="sidebar-list-item">
+                        {s.icon}
+                        <span className="sidebar-list-item-text">{s.name}</span>
                     </li>
-                    <li className="sidebar-list-item">
-                        <Home className="sidebar-list-item-icon"/>
-                        <span className="sidebar-list-item-text">item 1</span>
-                    </li>
-                    <li className="sidebar-list-item">
-                        <Home className="sidebar-list-item-icon"/>
-                        <span className="sidebar-list-item-text">item 1</span>
-                    </li>
-                    <li className="sidebar-list-item">
-                        <Home className="sidebar-list-item-icon"/>
-                        <span className="sidebar-list-item-text">item 1</span>
-                    </li>
-                    <li className="sidebar-list-item">
-                        <Home className="sidebar-list-item-icon"/>
-                        <span className="sidebar-list-item-text">item 1</span>
-                    </li>
-                    <li className="sidebar-list-item">
-                        <Home className="sidebar-list-item-icon"/>
-                        <span className="sidebar-list-item-text">item 1</span>
-                    </li>
+                    ))}
                 </ul>
                 <hr className="sidebar-line" />
-                <div className="rightbar-title">Lối tắt</div>
+                <div className="sidebar-title">Lối tắt</div>
                 <ul className="sidebar-group">
                     {category.map(c => (
                         <li className="sidebar-group-item">

@@ -22,7 +22,7 @@ router.post('/register', async(req, res) => {
             emailname: req.body.emailname,
             username: req.body.name,
             password: hashedPass,
-            role: "faculty",
+            role: req.body.role || "faculty",
             permissions: req.body.permissions
         })
 
