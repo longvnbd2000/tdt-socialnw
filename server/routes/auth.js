@@ -13,11 +13,11 @@ router.post('/register', async(req, res) => {
     try{
         const user = await User.findOne({emailname: req.body.emailname})
         if (user){
-            res.status(400).json("Username has been used")
+            return res.status(400).json("Username has been used")
         }
         const salt = await bcrypt.genSalt(10)
         const hashedPass = await bcrypt.hash(req.body.password, salt)
-
+        
         const newUser = new User({
             emailname: req.body.emailname,
             username: req.body.name,
@@ -25,12 +25,12 @@ router.post('/register', async(req, res) => {
             role: "faculty",
             permissions: req.body.permissions
         })
-
         const created = await newUser.save()
-        res.status(200).json("success")
+        return res.status(200).json("success")
     }
     catch (err){
-        res.status(500).json("failed")
+        console.log(err);
+        return res.status(500).json("failed")
     }
 })
 
@@ -38,11 +38,11 @@ router.post('/signin', async(req, res) => {
     try{
         const user = await User.findOne({emailname: req.body.emailname})
         if (!user){
-            res.status(404).json("user not found")
+            return res.status(404).json("user not found")
         }
         const comparePassword = await bcrypt.compare(req.body.password, user.password)
         if (!comparePassword){
-            res.status(400).json("wrong password")
+            return res.status(400).json("wrong password")
         }
         const userData = {
             _id: user._id,
@@ -53,11 +53,11 @@ router.post('/signin', async(req, res) => {
         const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET
         const accessToken = await jwtHelper.generateToken(userData, accessTokenSecret, accessTokenLife)
 
-        res.status(200).json({code: 'success', userToken: accessToken})
+        return res.status(200).json({code: 'success', userToken: accessToken})
         
     }
     catch(err){
-        res.status(500).json(err)
+        return res.status(500).json(err)
     }
     
 })

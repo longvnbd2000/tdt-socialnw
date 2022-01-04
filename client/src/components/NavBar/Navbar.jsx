@@ -360,12 +360,12 @@ export default function Navbar() {
                         </Link> 
                         
                         : user.role === 'faculty'
-                        ? <Link to="/announcement/create">
+                        ? <Link to="/announcement/list">
                             <MenuItem>
                             <ListItemIcon>
                             <AddAlert fontSize="small" />
                             </ListItemIcon>
-                            Create announment
+                            My announment
                             </MenuItem>
                         </Link>
                         : null

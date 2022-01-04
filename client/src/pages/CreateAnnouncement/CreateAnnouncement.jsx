@@ -8,8 +8,9 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios'
 import {AuthContext} from '../../context/AuthContext';
-import {Alert, IconButton, Collapse} from '@mui/material';
-import {CloseIcon} from '@mui/icons-material/Close'
+import {Alert, IconButton, Collapse, Button} from '@mui/material';
+import {CloseIcon, ArrowBack} from '@mui/icons-material'
+import { Link } from 'react-router-dom'
 
 export default function CreateAnnouncement() {
     const SV = process.env.REACT_APP_SV_HOST;
@@ -140,6 +141,13 @@ export default function CreateAnnouncement() {
                 <h1>THÔNG BÁO</h1>
                 <form className='announce-form' onSubmit={handleSubmit}>
                     <table className='announce-table'>
+                        <tr>
+                            <td colspan='2'>
+                                <IconButton variant="outlined" color="error">
+                                    <Link to="/announcement/list"><ArrowBack/></Link>
+                                </IconButton>
+                            </td>
+                        </tr>
                         <tr>
                             <td >
                                 <label htmlFor="announce-title"><h3>Tiêu đề</h3></label>
