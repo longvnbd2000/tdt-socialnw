@@ -10,11 +10,8 @@ import { SocketContext } from "./context/SocketContext";
 import axios from "axios";
 import Register from "./pages/Register/Register";
 import CreateAnnouncement from "./pages/CreateAnnouncement/CreateAnnouncement";
-<<<<<<< HEAD
 import MyAnnouncement from "./pages/MyAnnouncement/MyAnnouncement";
-=======
 import { io } from 'socket.io-client'
->>>>>>> d1d63bda46ba4dc360ef4aaba3c190cfee642b6a
 
 function App() {
   const SV = process.env.REACT_APP_SV_HOST

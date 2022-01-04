@@ -8,15 +8,10 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios'
 import {AuthContext} from '../../context/AuthContext';
-<<<<<<< HEAD
-import {Alert, IconButton, Collapse, Button} from '@mui/material';
+import {Alert, IconButton, Collapse} from '@mui/material';
+import { SocketContext } from '../../context/SocketContext'
 import {CloseIcon, ArrowBack} from '@mui/icons-material'
 import { Link } from 'react-router-dom'
-=======
-import {Alert, IconButton, Collapse} from '@mui/material';
-import {CloseIcon} from '@mui/icons-material/Close'
-import { SocketContext } from '../../context/SocketContext'
->>>>>>> d1d63bda46ba4dc360ef4aaba3c190cfee642b6a
 
 export default function CreateAnnouncement() {
     const SV = process.env.REACT_APP_SV_HOST;
