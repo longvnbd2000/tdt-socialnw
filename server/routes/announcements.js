@@ -46,10 +46,10 @@ router.get('/', async(req,res) => {
 })
 
 //Get user's announcement
-router.get('/list/emailname/:emailname', async(req,res) => {
+router.get('/list/userId/:userId', async(req,res) => {
     try{
-        let emailname = req.params.emailname
-        const user = await User.findOne({ emailname: emailname})
+        let userId = req.params.userId
+        const user = await User.findOne({ _id: userId})
         const userAnnouncement = await Announcement.find({userId: user._id}).sort(([['createdAt', -1]]))
         res.status(200).json(userAnnouncement)
     }catch{
