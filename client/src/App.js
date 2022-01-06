@@ -50,6 +50,8 @@ function App() {
 
         <Route path="/announcement/create" element={  user && user.role === "faculty" ? <CreateAnnouncement/> : <SigninPage />} />
 
+        <Route path="/announcement/create/:announceId" element={  user && user.role === "faculty" ? <CreateAnnouncement/> : <SigninPage />} />
+
         <Route path="/announcement/list" element={  user && user.role === "faculty" ? <MyAnnouncement/> : <SigninPage />} />   
 
         <Route path="/profile/:emailname" element={  user ? <Profile /> : <SigninPage />} />

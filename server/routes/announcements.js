@@ -37,7 +37,7 @@ router.put("/:id", async (req, res) => {
 //Get all Announcements
 router.get('/', async(req,res) => {
     try{
-        const allAnnouncements = await Announcement.find().sort([['createdAt', -1]])
+        const allAnnouncements = await Announcement.find().sort([['updatedAt', -1]])
         res.status(200).json(allAnnouncements);
     }catch(err){
         res.status(500).json(err)
@@ -50,13 +50,14 @@ router.get('/list/userId/:userId', async(req,res) => {
     try{
         let userId = req.params.userId
         const user = await User.findOne({ _id: userId})
-        const userAnnouncement = await Announcement.find({userId: user._id}).sort(([['createdAt', -1]]))
+        const userAnnouncement = await Announcement.find({userId: user._id}).sort(([['updatedAt', -1]]))
         res.status(200).json(userAnnouncement)
     }catch{
         res.status(500)
     }
 })
 
+//Delete announcement
 router.post('/:id', async(req, res) => {
     try{
         const announcement = await Announcement.findById(req.params.id)
@@ -71,6 +72,17 @@ router.post('/:id', async(req, res) => {
     catch(err){
         res.status(500).json(err)
     }
+})
+
+//Get one announcement for update
+router.get("/list/:id", async (req, res) => {
+    try{
+        const announcement = await Announcement.findById({_id:req.params.id})
+        res.status(200).json(announcement)
+    }
+    catch(err){
+        res.status(500).json(err)
+    }    
 })
 
 module.exports = router

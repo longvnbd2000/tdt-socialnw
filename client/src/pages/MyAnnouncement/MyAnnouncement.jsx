@@ -32,7 +32,7 @@ export default function MyAnnouncement({}) {
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    let index = 0
+    
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -85,6 +85,7 @@ export default function MyAnnouncement({}) {
         fetchAnnouncements()
     }, [user._id])
 
+    let index = 0
     return (
         <div>
             <Navbar/>
@@ -112,6 +113,7 @@ export default function MyAnnouncement({}) {
                                             <StyledTableCell align="left">Type</StyledTableCell>
                                             <StyledTableCell align="left">Faculty</StyledTableCell>
                                             <StyledTableCell align="left">Update at</StyledTableCell>
+                                            <StyledTableCell align="left">Time</StyledTableCell>
                                             <StyledTableCell align="left"></StyledTableCell>     
                                         </TableRow>
                                     </TableHead>

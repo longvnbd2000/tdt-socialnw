@@ -1,5 +1,6 @@
-import {React, useState, useEffect, useContext, useTheme} from 'react'
+import {React, useState, useEffect, useContext} from 'react'
 import { AuthContext } from '../../../context/AuthContext'
+import { useParams  } from 'react-router-dom'
 import axios from 'axios'
 import {Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Paper, Fab} from '@mui/material';
 import TableCell, { tableCellClasses }  from '@mui/material/TableCell';
@@ -12,7 +13,9 @@ import './MyAnnouncement.css'
 
 
 export default function UserAnnouncement({ announce, index }) {
+    const param = useParams()
     const [announcements, setAnnouncements] = useState({})
+    const [date, setDate] = useState(new Date(announce.updatedAt))
     const {user} = useContext(AuthContext)
     const SV = process.env.REACT_APP_SV_HOST
 
@@ -25,14 +28,6 @@ export default function UserAnnouncement({ announce, index }) {
     
     const handleCloseDelConfirm = () => {
         setOpenDelConfirm(false);
-    };
-
-    const handleClickOpenDetail = () => {
-        setOpenDetail(true);
-    };
-    
-    const handleCloseDetail = () => {
-        setOpenDetail(false);
     };
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -67,9 +62,10 @@ export default function UserAnnouncement({ announce, index }) {
         return () => isActive = false
     }, [announce.userId])
 
-    const deleteHandle = async () => {
+    const deleteHandle = () => {
         try{
-            await axios.post(SV + '/announcements/' + announce._id, {userId: user._id})
+            axios.post(SV + '/announcements/' + announce._id, {userId: user._id})
+            
         }catch(err){
             console.log(err);
         }
@@ -77,26 +73,7 @@ export default function UserAnnouncement({ announce, index }) {
 
 
     return (
-        <>     
-            <StyledTableRow
-            key={announce._id}
-            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <StyledTableCell component="th" scope="row">
-                    {index}
-                </StyledTableCell>
-                <StyledTableCell sx={{ maxWidth:250}} component="th" scope="row">
-                    {announce.title}
-                </StyledTableCell>
-                <StyledTableCell align="left">{announce.type}</StyledTableCell>
-                <StyledTableCell align="left">{announce.faculty}</StyledTableCell>
-                <StyledTableCell align="left">{format(announce.updatedAt)}</StyledTableCell>
-                <StyledTableCell align="left">
-                    <Button onClick={handleClickOpenDetail} variant="outlined" >Detail</Button>
-                    <Button variant="outlined" sx={{ml: 2}} color="error" onClick = {handleClickOpenDelConfirm}>Delete</Button>
-                </StyledTableCell>
-            </StyledTableRow>
-
-            {/* Delete Dialog */}
+        <>  
             <Dialog open={openDelConfirm} onClose={handleCloseDelConfirm}>
                 <DialogTitle>Delete Confirmation</DialogTitle>
                 <DialogContent>
@@ -109,9 +86,32 @@ export default function UserAnnouncement({ announce, index }) {
                     <Button onClick={handleCloseDelConfirm}>Cancel</Button>
                 </DialogActions>
             </Dialog>
+            <StyledTableRow
+            key={announce._id}
+            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <StyledTableCell component="th" scope="row">
+                    {index}
+                </StyledTableCell>
+                <StyledTableCell sx={{ maxWidth:150}} component="th" scope="row">
+                    {announce.title}
+                </StyledTableCell>
+                <StyledTableCell align="left">{announce.type}</StyledTableCell>
+                <StyledTableCell align="left" sx={{ maxWidth:150}}>{announce.faculty}</StyledTableCell>
+                <StyledTableCell align="left">{date.toLocaleDateString("en-US")}</StyledTableCell>
+                <StyledTableCell align="left">{format(date)}</StyledTableCell>
+                <StyledTableCell align="left">
+                    <Button variant="outlined" href={"/announcement/create/" + announce._id}>
+                        Detail
+                    </Button>
+                    <Button variant="outlined" sx={{ml: 1}} color="error" onClick = {handleClickOpenDelConfirm}>Delete</Button>
+                </StyledTableCell>
+            </StyledTableRow>
+
+            {/* Delete Dialog */}
+            
 
             {/* Detail Dialog */}
-            <Dialog open={openDetail} onClose={handleCloseDetail}>
+            {/* <Dialog open={openDetail} onClose={handleCloseDetail}>
                 <DialogTitle>{announce.title}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -122,7 +122,7 @@ export default function UserAnnouncement({ announce, index }) {
                     <Button>Confirm</Button>
                     <Button onClick={handleCloseDetail}>Cancel</Button>
                 </DialogActions>
-            </Dialog>    
+            </Dialog>     */}
         </>
     )
 }
