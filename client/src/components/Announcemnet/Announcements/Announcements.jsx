@@ -47,13 +47,16 @@ export default function Announcements({announcement}) {
             >
                 <DialogTitle id="scroll-dialog-title">{announcement.title}</DialogTitle>
                 <DialogContent dividers={true}>
-                <DialogContentText
-                    id="scroll-dialog-description"
-                    ref={descriptionElementRef}
-                    tabIndex={-1}
-                >
-                    {parse(announcement.text)}
-                </DialogContentText>
+                <div className='announcements-container'>
+                    <div className='announcements-sender'>{announcement.faculty} | {date.toLocaleDateString("en-US")}</div>
+                    <DialogContentText
+                        id="scroll-dialog-description"
+                        ref={descriptionElementRef}
+                        tabIndex={-1}
+                    >
+                        {parse(announcement.text)}
+                    </DialogContentText>
+                </div>
                 </DialogContent>
                 <DialogActions>
                 <Button onClick={handleClose}>Close</Button>

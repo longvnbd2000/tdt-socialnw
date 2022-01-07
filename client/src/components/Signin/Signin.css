@@ -103,3 +103,7 @@
 .signin-submit-btn:hover{
     background: linear-gradient(to right,#6291c7,#74d8c2);
 }
+.signin-error{
+    margin-top: 20px;
+    color: red;
+}

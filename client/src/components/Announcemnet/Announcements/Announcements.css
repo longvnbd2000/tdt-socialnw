@@ -24,16 +24,23 @@
     font-weight: 600;
     font-size: 22px;
     color: #0004ff;
+    max-width: 35vw;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .announcements-list-item-text{
     padding: 20px;
+    
 }
-.announcements-list-item-text p{
-    width: 100%;
-    height: 40px;
+.announcements-list-item-text *{
+    max-width: 35vw;
+    display: block;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .announcements-list-item-bottom{
     display: flex;
@@ -46,4 +53,15 @@
 .announcements-list-item-date{
     text-align: right;
     color: rgb(233, 0, 0);
+}
+
+.announcements-container{
+    width: 50vh;
+    height: 60vh;
+}
+.announcements-sender{
+    color: #0004ff;
+    font-size: 15px;
+    text-align: right;
+    margin-bottom: 15px;
 }

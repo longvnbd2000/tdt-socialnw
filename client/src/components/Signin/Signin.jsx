@@ -14,6 +14,7 @@ export default function Signin() {
     const [toggleBtnOth, setToggleBtnOth] = useState('toggle-btn oth')
     const [students, setStudents] = useState('students')
     const [others, setOthers] = useState('others')
+    const [ggErrorMessage, setGgErrorMessage] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
 
     const SV = process.env.REACT_APP_SV_HOST
@@ -43,11 +44,11 @@ export default function Signin() {
         const password = passwordRef.current.value
 
         if(emailname === "" || emailname === null){
-            setErrorMessage("Please enter Username")
+            setErrorMessage("Vui lòng nhập tài khoản")
             return false
         }
         if(password === "" || password === null){
-            setErrorMessage("Please enter Password")
+            setErrorMessage("Vui lòng nhập mật khẩu")
             return false
         }
 
@@ -60,6 +61,17 @@ export default function Signin() {
                 
                 dispatch({type: "SIGNIN_SUCCESS", payload: user.data})
             }
+            if(res.data.code === "user not found"){
+                setErrorMessage("Tài khoản không tồn tại")
+                dispatch({type: "SIGNIN_FAILURE", payload: res.data.code})
+                return false
+            }
+            if(res.data.code === "wrong password"){
+                setErrorMessage("Sai mật khẩu")
+                dispatch({type: "SIGNIN_FAILURE", payload: res.data.code})
+                return false
+            }
+            
         }
         catch(err){
             dispatch({type: "SIGNIN_FAILURE", payload: err})
@@ -75,8 +87,12 @@ export default function Signin() {
             if(res.data.code === "success"){
                 localStorage.setItem('userToken', res.data.userToken)
                 const user = await axios.get(SV+"/auth/user/" + localStorage.getItem('userToken'))
-                console.log(user)
                 dispatch({type: "SIGNIN_SUCCESS", payload: user.data})
+            }
+            if(res.data.code === "email not aceptable"){
+                setGgErrorMessage("Chỉ được phép đăng nhập bằng email có đuôi student.tdtu.edu.vn hoặc tdtu.edu.vn")
+                dispatch({type: "SIGNIN_FAILURE", payload: res.data.code})
+                return false
             }
         }
         catch(err){
@@ -99,17 +115,18 @@ export default function Signin() {
 
                 <form className={others} onSubmit={signInHandler}>
                     <div className="form-group">
-                        <input type="text" placeholder="Username" ref={emailnameRef}/>
+                        <input type="text" placeholder="Tài khoản" ref={emailnameRef}/>
                     </div>
                     <br/>
                     <div className="form-group">  
-                        <input type="password" placeholder="Password" ref={passwordRef}/>
+                        <input type="password" placeholder="Mật khẩu" ref={passwordRef}/>
                     </div>
-                    <button className="signin-submit-btn" type="submit">{ isFetching ? <CircularProgress color="secondary" size="20px" /> : "Sign in"}</button>
+                    {errorMessage ? <div className='signin-error'>{errorMessage}</div> : null}
+                    <button className="signin-submit-btn" type="submit">{ isFetching ? <CircularProgress color="secondary" size="20px" /> : "Đăng nhập"}</button>
                 </form>
 
                 <div className={students}>
-                    <div>@student.tdtu.edu.vn</div>
+                    
 
                     <GoogleLogin 
                         clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
@@ -118,6 +135,8 @@ export default function Signin() {
                         onFailure={googleRespone}
                         cookiePolicy={'single_host_origin'}
                     ></GoogleLogin>
+
+                    {ggErrorMessage ? <div className='signin-error'>{ggErrorMessage}</div> : null}
                 </div>
                 
             </div>

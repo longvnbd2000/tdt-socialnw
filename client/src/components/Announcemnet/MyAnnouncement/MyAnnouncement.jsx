@@ -92,7 +92,7 @@ export default function UserAnnouncement({ announce, index }) {
                 <StyledTableCell component="th" scope="row">
                     {index}
                 </StyledTableCell>
-                <StyledTableCell sx={{ maxWidth:150}} component="th" scope="row">
+                <StyledTableCell sx={{ maxWidth:150, maxHeight:20}} component="th" scope="row" className="announce-overflow">
                     {announce.title}
                 </StyledTableCell>
                 <StyledTableCell align="left">{announce.type}</StyledTableCell>

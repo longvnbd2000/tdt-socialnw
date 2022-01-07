@@ -38,11 +38,11 @@ router.post('/signin', async(req, res) => {
     try{
         const user = await User.findOne({emailname: req.body.emailname})
         if (!user){
-            return res.status(404).json("user not found")
+            return res.json({code:"user not found"})
         }
         const comparePassword = await bcrypt.compare(req.body.password, user.password)
         if (!comparePassword){
-            return res.status(400).json("wrong password")
+            return res.json({code:"wrong password"})
         }
         const userData = {
             _id: user._id,
@@ -66,14 +66,19 @@ router.post('/signin/google', async(req, res) => {
     try{
         const user = await User.findOne({email: req.body.email})
         if(!user) {
-            const emailname = req.body.email.split('@')[0]
-            const newUser = new User({
-                authId: "google:" + req.body.authId,
-                email: req.body.email,
-                emailname: emailname,
-                username: req.body.name,
-            })
-            await newUser.save()
+            if(req.body.email.split('@')[1] == "student.tdtu.edu.vn" || req.body.email.split('@')[1] == "tdtu.edu.vn"){
+                const emailname = req.body.email.split('@')[0]
+                const newUser = new User({
+                    authId: "google:" + req.body.authId,
+                    email: req.body.email,
+                    emailname: emailname,
+                    username: req.body.name,
+                })
+                await newUser.save()
+            }
+            else{
+                return res.json({code: 'email not aceptable'})
+            }
         }
         const getUser = await User.findOne({email: req.body.email})
         const userData = {

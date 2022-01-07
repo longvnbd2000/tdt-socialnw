@@ -158,14 +158,25 @@ a{
 }
 
 @media only screen and (max-width: 1000px){
+    .navbar-search{
+        width: 40px;
+    }
+    .navbar-search-icon{
+        cursor: pointer;
+    }
+    .navbar-search-bar{
+        display: none;
+    }
+
     .navbar-link-text{
         display: none;
     }
     .navbar-right{
-        flex: 6;
+        flex: 4;
     }
     .navbar-center{
-        flex: 2;
+        flex: 4;
+        
     }
     .navbar-user-name{
         display: none;

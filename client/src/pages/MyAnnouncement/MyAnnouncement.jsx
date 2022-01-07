@@ -105,7 +105,7 @@ export default function MyAnnouncement({}) {
                     // Have Announcement
                         haveAnnouncements ?
                             <TableContainer sx={{mt: 3}} component={Paper}>
-                                <Table sx={{ minWidth:800, maxWidth: 1000 }} aria-label="simple table">
+                                <Table sx={{ minWidth:800 }} aria-label="simple table">
                                     <TableHead>
                                         <TableRow>
                                             <StyledTableCell align="left">#</StyledTableCell>
