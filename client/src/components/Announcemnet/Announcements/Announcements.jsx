@@ -30,7 +30,7 @@ export default function Announcements({announcement}) {
             <ul className="announcements-list">
                 <li className="announcements-list-item" onClick={handleClickOpen()}>
                     <div className="announcements-list-item-title">{announcement.title}</div>
-                    <div className="announcements-list-item-text">{parse(announcement.text)}</div>
+                    
                     <div className="announcements-list-item-bottom">
                         <div className="announcements-list-item-faculty">{announcement.faculty}</div>
                         <div className="announcements-list-item-date">{date.toLocaleDateString("en-US")}</div>

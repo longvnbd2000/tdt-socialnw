@@ -24,7 +24,7 @@
     font-weight: 600;
     font-size: 22px;
     color: #0004ff;
-    max-width: 35vw;
+    max-width: 40vw;
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -33,19 +33,22 @@
 
 .announcements-list-item-text{
     padding: 20px;
-    
-}
-.announcements-list-item-text *{
-    max-width: 35vw;
+    height: 40px;
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    
+}
+.announcements-list-item-text *{
+    max-width: 35vw;
+    
 }
 .announcements-list-item-bottom{
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-top: 20px;
 }
 .announcements-list-item-faculty{
     color: rgb(233, 0, 0);
