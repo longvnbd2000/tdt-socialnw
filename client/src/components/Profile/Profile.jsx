@@ -147,17 +147,12 @@ export default function Profile({emailname}) {
         const userToUpdate = user
 
         if(oldPassword === "" || oldPassword === null){
-            setErrorMessage("Old password can not be empty")
+            setErrorMessage("Mật khẩu không được để trống")
             console.log(errorMessage)
             return false
         }
         if(newPassword === "" || newPassword === null){
-            setErrorMessage("New password can not be empty")
-            console.log(errorMessage)
-            return false
-        }
-        if(rePassword === "" || rePassword === null){
-            setErrorMessage("Re password can not be empty")
+            setErrorMessage("Mật khẩu mới không được để trống")
             console.log(errorMessage)
             return false
         }

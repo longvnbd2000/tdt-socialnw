@@ -16,6 +16,7 @@ export default function Register() {
 
     const [permissions, setPermissions] = useState([])
     const [errorMessage, setErrorMessage] = useState("")
+    const [successMessage, setSuccessMessage] = useState("")
 
     const handleCheckbox = (e) => {
         if(e.target.checked){
@@ -38,28 +39,30 @@ export default function Register() {
         const password = passwordRef.current.value
         const confirmPassword = confirmPasswordRef.current.value
         if(emailname === "" || emailname === null){
-            setErrorMessage("Please enter Username")
+            setErrorMessage("Bạn chưa nhập tên đăng nhập")
             return false
         }
         if(name === "" || name === null){
-            setErrorMessage("Please enter Name")
+            setErrorMessage("Bạn chưa nhập họ và tên")
             return false
         }
         if(password === "" || password === null){
-            setErrorMessage("Please enter Password")
+            setErrorMessage("Bạn chưa nhập mật khẩu")
             return false
         }
         if(password !== confirmPassword){
-            setErrorMessage("Password does not match")
+            setErrorMessage("Xác nhận mật khẩu không chính xác")
             return false
         }
         if(permissions.length === 0){
-            setErrorMessage("You must grant at least one permission")
+            setErrorMessage("Bạn phải cấp ít nhất một quyền cho tài khoản")
             return false
         }
 
         try {
             const res = await axios.post(SV+"/auth/register", {emailname, name, password, permissions})
+            setErrorMessage("")
+            setSuccessMessage("Tạo tài khoản thành công")
         }
         catch(err){
 
@@ -74,19 +77,19 @@ export default function Register() {
             <form className="register" onSubmit={handleRegister}>
                 <div className="register-input-group">
                     <div className="form-group">
-                        <input type="text" placeholder="Username" ref={emailnameRef}/>
+                        <input type="text" placeholder="Tên đăng nhập" ref={emailnameRef}/>
                     </div>
                     <br/>
                     <div className="form-group">
-                        <input type="text" placeholder="Name" ref={nameRef}/>
+                        <input type="text" placeholder="Họ và tên" ref={nameRef}/>
                     </div>
                     <br/>
                     <div className="form-group">  
-                        <input type="password" placeholder="Password" ref={passwordRef}/>
+                        <input type="password" placeholder="Mật khẩu" ref={passwordRef}/>
                     </div>
                     <br/>
                     <div className="form-group">  
-                        <input type="password" placeholder="Confirm Password" ref={confirmPasswordRef}/>
+                        <input type="password" placeholder="Xác nhận mật khẩu" ref={confirmPasswordRef}/>
                     </div>
                 </div>
 
@@ -140,8 +143,9 @@ export default function Register() {
                     <br />
                     <label><input type="checkbox" name="permission" value="Khoa giáo dục quốc tế" onChange={handleCheckbox} />  Khoa giáo dục quốc tế</label>
                 </div>
-                
-                <button className="submit-btn" type="submit" >Register</button>
+                <div className='register-error'>{errorMessage!=="" ? errorMessage : ""}</div>
+                <div className='register-success'>{successMessage!=="" ? successMessage : ""}</div>
+                <button className="submit-btn" type="submit" >Đăng ký</button>
                 <br />
             </form>
             <Link className="register-back" to="/"><ArrowBack /></Link>

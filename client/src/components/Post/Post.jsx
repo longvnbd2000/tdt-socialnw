@@ -192,15 +192,15 @@ export default function Post({ post }) {
 
         <div className="post">
             <Dialog open={openDelConfirm} onClose={handleCloseDelConfirm}>
-                <DialogTitle>Delete Confirmation</DialogTitle>
+                <DialogTitle>Xác nhận xóa bài viết</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Do you want to delete this post?
+                        Bài viết sau khi xóa sẽ không thể khôi phục. Bạn có chắc chắn muốn xóa bài viết này? 
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={deleteHandle}>Confirm</Button>
-                    <Button onClick={handleCloseDelConfirm}>Cancel</Button>
+                    <Button onClick={deleteHandle}>Xác nhận</Button>
+                    <Button onClick={handleCloseDelConfirm}>Hủy</Button>
                 </DialogActions>
             </Dialog>
 
@@ -345,7 +345,7 @@ export default function Post({ post }) {
                 <form className={'post-send-comment ' + (isActive ? 'active' : '')} onSubmit={commentHandle}>
                     <img src={PF+user.avatar} alt="" className="comment-avatar" />
                     <div className="comment-input">
-                        <input type="text" placeholder='Input message' id={post._id} ref={commentRef} />
+                        <input type="text" placeholder='Nhập bình luận' id={post._id} ref={commentRef} />
                     </div>
                     
                     <button type='submit' className='comment-input-btn'><Send /></button>

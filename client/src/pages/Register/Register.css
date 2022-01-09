@@ -83,3 +83,14 @@
     width: auto !important;
     margin: 6px 0px !important;
 }
+.register-error, .register-success{
+    position: absolute;
+    color: red;
+    left: 200px;
+    top: 400px;
+    width: 500px;
+    text-align: center;
+}
+.register-success{
+    color: rgb(21, 221, 21);
+}
